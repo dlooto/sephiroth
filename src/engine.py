@@ -3,8 +3,12 @@ from threading import Timer, Thread
 import time
 from context import *
 
-class Engine:
+from actions import *
 
+class Engine:
+    """
+
+    """
     args = 1
 
     def __init__(self, config):
@@ -22,11 +26,15 @@ class Engine:
             timer.start()
 
     def start(self):
+        """
+        """
         interval = self.config['main']['interval']
         timer = Timer(int(interval), self.__loop)
         timer.start()
 
     def run(self):
+        """
+        """
         interval = self.config['main']['interval']
         print(interval, type(interval), str(Thread.name))
         
@@ -42,7 +50,14 @@ class Engine:
         actions = self.load_actions(actions_config)
 
         for action in actions:
+            if not action:
+                raise Exception("No action loaded")
             self.run_action(action, context)
+
+    def create_action(self, action_config):
+        action_type = action_config['type']
+        clz = Action.get_action_class(action_type)
+        return clz()
 
     def load_actions(self, actions_config):
         """
@@ -50,11 +65,25 @@ class Engine:
         """
         actions = []
 
-        actions.append(None)
+        action_config = actions_config['main']
+        while action_config:
+            action = self.create_action(action_config)
+            actions.append(action)
+
+            next_action = action_config['next']
+            if next_action not in actions_config:
+                break
+            
+            action_config = actions_config[next_action]
+
         return actions
 
     def run_action(self, action, context):
+        """
+        """
+        # TODO: Log
         print("Running")
+        action.execute(context)
 
         
 

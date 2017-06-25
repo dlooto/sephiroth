@@ -19,12 +19,12 @@ table="cinderella_rec"
 
 # action.main 是一个执行序列的第一个action
 [action.main]
-type = "mysql.select"
-next = "action.post"
+type = "mysql_select"
+next = "post"
 datasource="mysql1"
 
 [action.post]
-type = "http.post"
+type = "http_send"
 url = "http://127.0.0.1:1024/d/send"
 next = ""
 
