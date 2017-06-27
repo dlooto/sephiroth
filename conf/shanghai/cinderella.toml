@@ -2,8 +2,10 @@
 
 [main]
 # Interval is 30 seconds
-name = "Cinderella"
-interval=2
+name = "cinderella"
+
+# every-min 00 30
+triggers= ["every-minute 05", "every-minute 35"]
 
 [datasource]
 type="mysql"

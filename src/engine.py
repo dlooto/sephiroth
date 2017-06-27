@@ -2,7 +2,7 @@
 from threading import Timer, Thread
 import time
 from context import *
-
+from clock import *
 from actions import *
 
 class Engine:
@@ -12,32 +12,35 @@ class Engine:
     args = 1
 
     def __init__(self, config):
-        print("?", str(Thread.name))
         self.config = config
 
-    def __loop(self):
+    @property
+    def name(self):
+        return self.config['main']['name']
+
+    def run(self):
         try:
-            self.run()
+            self.__run()
         except Exception as e:
-            print("Ex", e)
+            print("Exception:\n", e)
         finally:
-            interval = self.config['main']['interval']
-            timer = Timer(int(interval), self.__loop)
-            timer.start()
+            Clock.trigger_followers(self)
 
     def start(self):
         """
         """
-        interval = self.config['main']['interval']
-        timer = Timer(int(interval), self.__loop)
-        timer.start()
-
-    def run(self):
-        """
-        """
-        interval = self.config['main']['interval']
-        print(interval, type(interval), str(Thread.name))
         
+        # TODO: Register Engine in clock.tick for very 30 s
+        triggers = self.config['main']['triggers']
+        if isinstance(triggers, str):
+            triggers = [triggers]
+        for trigger in triggers:
+            Clock.register(self, trigger)   
+
+
+    def __run(self):
+        """
+        """
         if 'action' not in self.config:
             return
         actions_config = self.config['action']
