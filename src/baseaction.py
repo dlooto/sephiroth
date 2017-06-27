@@ -22,6 +22,14 @@ class BaseAction:
     def __init__(self):
         pass
 
+    def set_global_resources(self, global_resources):
+        self.global_resources = global_resources
+
+    def lookup_resource(self, resource_name):
+        pass
 
     def execute(self, context):
         print("A")
+
+from httpsenddataaction import *
+from mysqlselectaction import *        

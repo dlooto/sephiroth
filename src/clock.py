@@ -78,8 +78,6 @@ class Clock:
                 Timer(delay, follower.run).start()
         
 
-
-
     @staticmethod
     def tick():
         Clock.on_every_second()

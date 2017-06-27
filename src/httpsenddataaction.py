@@ -1,5 +1,5 @@
 
-from .baseaction import *
+from baseaction import *
 
 @Action.register("http_send")
 class HttpSendDataAction(BaseAction):

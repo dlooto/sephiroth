@@ -1,0 +1,10 @@
+# global.toml is a special file for define global resources
+# And look up from Resource.find(resource_name)
+
+[mysqlconnection.mysqlconnection]
+host="localhost"
+port=3306
+user="root"
+passwd="root"
+database="pytodo"
+charset="utf8"

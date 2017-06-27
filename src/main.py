@@ -5,7 +5,7 @@ import sys
 import pytoml as toml
 
 from engine import *
-
+from resource import *
 
 
 def load_action_config(filename) -> dict:
@@ -30,13 +30,27 @@ def load_configs() -> list:
     configs = []
     for fs in os.walk(config_path):
         for file in fs[2]:
-            configs.append(load_action_config(os.path.join(fs[0], file)))
+            # Ignore the unused toml files
+            if file.startswith('!'):
+                continue
+            config = load_action_config(os.path.join(fs[0], file))
+            config['filename'] = file
+            configs.append(config)
 
     return configs
 
+
+
 def main(configs):
     Clock.tick()
+    
     for config in configs:
+        if config['filename'] == 'global.toml':
+            Resource.initialize_global_resources(config)
+    for config in configs:
+        # Ignore the global resource file
+        if config['filename'] == 'global.toml':
+            continue
         e = Engine(config)
         e.start()
 

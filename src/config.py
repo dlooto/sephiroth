@@ -13,7 +13,7 @@ class Config:
         with open(self.filename, 'rb') as file:
             self.config = toml.load(file)
 
-
+    
     def reload(self):
         pass
 

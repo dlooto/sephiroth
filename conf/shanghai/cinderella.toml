@@ -10,7 +10,8 @@ triggers= ["every-minute 05", "every-minute 35"]
 [datasource]
 type="mysql"
 
-[mysql1]
+[resource]
+type="mysqlconnection"
 hots=""
 port=""
 user="root"
