@@ -7,10 +7,9 @@ from baseaction import *
 
 class Engine:
     """
-
+    An engine drives a sequence of actions with a context
     """
-    args = 1
-
+    
     def __init__(self, config):
         self.config = config
 
@@ -18,13 +17,16 @@ class Engine:
     def name(self):
         return self.config['main']['name']
 
-    def run(self):
+    def run(self, context=None):
+        """
+        """
         try:
-            self.__run()
+            context = self.__run(context)
         except Exception as e:
             print("Exception:\n", e)
         finally:
-            Clock.trigger_followers(self)
+            # Keep the context for the follower engines
+            Clock.trigger_followers(Engine.run, self, context)
 
     def start(self):
         """
@@ -38,7 +40,7 @@ class Engine:
             Clock.register(self, trigger)   
 
 
-    def __run(self):
+    def __run(self, context):
         """
         """
         if 'action' not in self.config:
@@ -47,20 +49,25 @@ class Engine:
         if 'main' not in actions_config:
             print("Counld NOT find main action!")
         else:
-            print(self.config['main']['name'] + "?")
+            print('Engine', self.config['main']['name'])
 
-        context = Context()
+        if not context:
+            print('Create new context')
+            context = Context()
         actions = self.load_actions(actions_config)
 
         for action in actions:
             if not action:
                 raise Exception("No action loaded")
             self.run_action(action, context)
+        return context
 
     def create_action(self, action_config):
         action_type = action_config['type']
         clz = Action.get_action_class(action_type)
-        return clz()
+        action = clz()
+        action.set_action_config(action_config)
+        return action
 
     def load_actions(self, actions_config):
         """
@@ -72,10 +79,12 @@ class Engine:
         while action_config:
             action = self.create_action(action_config)
             actions.append(action)
-
+            
+            if 'next' not in action_config or action_config['next'] == '':
+                break
             next_action = action_config['next']
             if next_action not in actions_config:
-                break
+                raise Exception("No action provided")
             
             action_config = actions_config[next_action]
 
@@ -85,7 +94,7 @@ class Engine:
         """
         """
         # TODO: Log
-        print("Running")
+        print("-" * 40)
         action.execute(context)
 
         

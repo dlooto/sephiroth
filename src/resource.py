@@ -1,5 +1,6 @@
 
 import MySQLdb
+import MySQLdb.cursors
 
 class Resource:
 
@@ -19,7 +20,7 @@ class Resource:
     def initialize_mysql_connection(scope, config):
         resource_name = list(config.keys())[0]
         config = config[resource_name]
-        db = MySQLdb.connect(**config)
+        db = MySQLdb.connect(**config, cursorclass=MySQLdb.cursors.DictCursor)
 
         Resource.global_respurce_map[resource_name] = db
 

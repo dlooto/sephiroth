@@ -1,0 +1,12 @@
+
+
+[main]
+# Interval is 30 seconds
+name = "fetchcmd"
+triggers = "every-minute 00"
+
+[action.main]
+type = "http_get"
+url = "http://127.0.0.1:1024/d/cmd/history"
+return="@r"
+

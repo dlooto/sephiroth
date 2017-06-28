@@ -19,6 +19,8 @@ class Action:
 
 
 class BaseAction:
+    """
+    """
     def __init__(self):
         pass
 
@@ -28,8 +30,15 @@ class BaseAction:
     def lookup_resource(self, resource_name):
         pass
 
+    def set_action_config(self, action_config):
+        self.action_config = action_config
+
+    def get_action_config(self):
+        return self.action_config
+
     def execute(self, context):
-        print("A")
+        pass
 
 from httpsenddataaction import *
+from httpgetaction import *
 from mysqlselectaction import *        

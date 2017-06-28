@@ -1,6 +1,7 @@
 
 
 from threading import Timer
+
 import time
 import re
 
@@ -62,20 +63,23 @@ class Clock:
         
         for (time_format, engine) in Clock.time_format_engine_list:
             if time_format.match(current_time):
-                print(time_format, current_time)
+                print('Trigger on', current_time)
                 engine.run()
 
     @staticmethod
-    def trigger_followers(engine):
+    def trigger_followers(run_func, engine, context):
+        """
+        TODO: run_func? 
+        """
         if engine.name not in Clock.follower_map:
             return
         followers = Clock.follower_map[engine.name]
         for (follower, delay) in followers:
             # TODO: Delay
             if delay == 0:
-                follower.run()
+                follower.run(context)
             else:
-                Timer(delay, follower.run).start()
+                Timer(delay, run_func, (follower, context)).start()
         
 
     @staticmethod

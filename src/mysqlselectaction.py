@@ -1,6 +1,7 @@
 
 from baseaction import *
 from resource import *
+import MySQLdb.cursors
 
 @Action.register("mysql_select")
 class MySQLSelectAction(BaseAction):
@@ -9,6 +10,7 @@ class MySQLSelectAction(BaseAction):
         pass
 
     def execute(self, context):
+        print(context)
         db = Resource.find_resource('mysqlconnection')
         with db.cursor() as cursor:
             cursor.execute('show tables')

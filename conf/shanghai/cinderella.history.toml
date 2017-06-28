@@ -1,13 +1,18 @@
 
+
 [main]
 # Interval is 30 seconds
-triggers = "after cinderella @delay 5"
-name = "Hpge"
+name = "cinderella.history"
+
+# every-min 00 30
+triggers = "after fetchcmd"
+
 
 
 # action.main 是一个执行序列的第一个action
 [action.main]
 type = "mysql_select"
+mysqlconnection="mysqlconnection"
 next = "post"
 datasource="mysql1"
 
@@ -15,3 +20,6 @@ datasource="mysql1"
 type = "http_send"
 url = "http://127.0.0.1:1024/d/send"
 next = ""
+
+
+
