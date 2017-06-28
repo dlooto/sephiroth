@@ -23,7 +23,7 @@ class Engine:
         try:
             context = self.__run(context)
         except Exception as e:
-            print("Exception:\n", e)
+            print("Exception:", e.with_traceback())
         finally:
             # Keep the context for the follower engines
             Clock.trigger_followers(Engine.run, self, context)

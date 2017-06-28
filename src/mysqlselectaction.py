@@ -10,8 +10,10 @@ class MySQLSelectAction(BaseAction):
         pass
 
     def execute(self, context):
-        print(context)
+        result = None
         db = Resource.find_resource('mysqlconnection')
         with db.cursor() as cursor:
-            cursor.execute('show tables')
-            print(cursor.fetchall())
+            action_config = self.get_action_config()
+            cursor.execute(action_config['sql'])
+            result = cursor.fetchall()
+            context.set_return_value(result)

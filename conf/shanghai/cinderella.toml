@@ -5,7 +5,7 @@
 name = "cinderella"
 
 # every-min 00 30
-triggers= ["every-minute 05", "every-minute 35"]
+triggers= ["every-minute 05", "every-minute 15", "every-minute 05", "every-minute 28", "every-minute 35", "every-minute 50"]
 
 [datasource]
 type="mysql"
@@ -15,12 +15,31 @@ type="mysql"
 [action.main]
 type = "mysql_select"
 mysqlconnection="mysqlconnection"
+sql = "select * from z_cinderella_rec"
+next = "transform"
+
+[action.transform]
+type = "resultset_to_form"
+key_value_attributes = [
+    ["PressureDiff", "pressureDiff", ""],
+    ["Pressure", "pressure", ""],
+    ["Temperature", "temperature", ""],
+    ["FlowPerHour", "flowPerHour", ""],
+    ["Flow", "flow", ""],
+    ["Worktime", "workTime", ""],
+    ["BeginTime", "beginTime", ""],
+    ["Barcode", "barcode", ""],
+    ["Sid", "sid", ""],
+    ["Time", "dataTime", ""],
+    ]
+input = "$"
+output = "$"
 next = "post"
-datasource="mysql1"
 
 [action.post]
-type = "http_send"
-url = "http://127.0.0.1:1024/d/send"
+type = "http_post"
+url = "http://127.0.0.1:1024/d/send/2"
+data = "$"
 next = ""
 
 

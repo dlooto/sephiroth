@@ -39,6 +39,7 @@ class BaseAction:
     def execute(self, context):
         pass
 
-from httpsenddataaction import *
-from httpgetaction import *
-from mysqlselectaction import *        
+
+from http_actions import *
+from mysqlselectaction import *
+from formdata import *      
