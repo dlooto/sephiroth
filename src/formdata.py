@@ -13,14 +13,23 @@ class ResultSetToFormAction(BaseAction):
         for d in dict_list:
             for key, value in d.items():
                 data_key = key
+                convert = ""
                 if key in key_value_attributes_map:
-                    data_key = key_value_attributes_map[key][0]
+                    attr = key_value_attributes_map[key]
+                    data_key = attr[0]
+                    if len(attr) > 1:
+                        convert = key_value_attributes_map[key][1]
                 # ["SomeKey", "", ""], if set the second empty string, 
                 # it would prevend transform this field in the destination dict
                 if data_key == "":
                     continue
                 key = "data[%d][%s]" % (index, data_key)
-                result[key] = 11
+                if convert == "":
+                    result[key] = value
+                else:
+                    # TODO:
+                    from convertor import Converters
+                    result[key] = Converters.get(convert)(value)
             index += 1
         return result
 

@@ -27,10 +27,10 @@ key_value_attributes = [
     ["FlowPerHour", "flowPerHour", ""],
     ["Flow", "flow", ""],
     ["Worktime", "workTime", ""],
-    ["BeginTime", "beginTime", ""],
+    ["BeginTime", "beginTime", "unixtime"],
     ["Barcode", "barcode", ""],
     ["Sid", "sid", ""],
-    ["Time", "dataTime", ""],
+    ["Time", "dataTime", "unixtime"],
     ]
 input = "$"
 output = "$"
