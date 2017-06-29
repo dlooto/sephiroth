@@ -31,6 +31,6 @@ class HttpPostAction(BaseAction):
         print("--" * 40)
         print(data)
         # data = self.convert_to_form(data)
-        
-        resp = requests.post(action_config['url'], data=data)
+        post_url = action_config['url']
+        resp = requests.post(post_url, data=data)
         print(resp.text)

@@ -50,6 +50,9 @@ class Clock:
             else:
                 Clock.follower_map[action_before] = [(engine, delay)]
             
+    @staticmethod
+    def on_idle():
+        print('On Idle')
 
     @staticmethod
     def on_every_second():
@@ -60,11 +63,15 @@ class Clock:
         Clock.last_emit_second = current_second
         
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(current_second))
-        
+        match_count = 0
         for (time_format, engine) in Clock.time_format_engine_list:
             if time_format.match(current_time):
                 print('Trigger on', current_time)
+                match_count += 1
                 engine.run()
+        
+        if match_count == 0:
+            Clock.on_idle()
 
     @staticmethod
     def trigger_followers(run_func, engine, context):
@@ -84,7 +91,10 @@ class Clock:
 
     @staticmethod
     def tick():
-        Clock.on_every_second()
         # If set interval=1s, some second frames would be lost.
+        # start timer in advanced, then do the work, 
+        # prevent the workloads waiting too long
         timer = Timer(.5, Clock.tick)
         timer.start()
+
+        Clock.on_every_second()
