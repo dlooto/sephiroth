@@ -12,6 +12,8 @@ class Resource:
         for sec in config:
             if sec == 'mysqlconnection':
                 Resource.initialize_mysql_connection('G', config[sec])
+            if sec == 'logger':
+                Resource.initialize_logger('G', config[sec])
             else:
                 pass
 
@@ -28,6 +30,13 @@ class Resource:
 
         Resource.global_respurce_map[resource_name] = db
 
+    @staticmethod
+    def initialize_logger(scope, config):
+        import log
+        logger = log.Logger(config)
+        logger.init()
+        Resource.global_respurce_map[resource_name] = logger
+        pass
 
     @staticmethod
     def find_resource(resource_name):

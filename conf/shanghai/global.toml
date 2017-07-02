@@ -8,3 +8,8 @@ user="root"
 passwd="root"
 database="antares"
 charset="utf8"
+
+
+[logger.global]
+path=""
+switch = "daily" #每天创建一个新的文件

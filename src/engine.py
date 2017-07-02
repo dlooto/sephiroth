@@ -4,6 +4,16 @@ import time
 from context import *
 from clock import *
 from baseaction import *
+import threading
+
+# EngineState_Init -> EngineState_Start -> EngineState_Running -> EngineState_Waiting
+# -> EngineState_Running
+EngineState_Unknown     = 0
+EngineState_Init        = 1
+EngineState_Start       = 2
+EngineState_Running     = 3
+EngineState_Waiting     = 4
+
 
 class Engine:
     """
@@ -12,6 +22,10 @@ class Engine:
     
     def __init__(self, config):
         self.config = config
+        self.__state = EngineState_Init
+
+    def get_state(self):
+        return self.__state
 
     @property
     def name(self):
@@ -21,10 +35,13 @@ class Engine:
         """
         """
         try:
+            self.__state = EngineState_Running
+            print("ThreadId:", threading.get_ident())
             context = self.__run(context)
         except Exception as e:
             print("Exception:", e.with_traceback())
         finally:
+            self.__state = EngineState_Waiting
             # Keep the context for the follower engines
             Clock.trigger_followers(Engine.run, self, context)
 
@@ -36,6 +53,8 @@ class Engine:
         triggers = self.config['main']['triggers']
         if isinstance(triggers, str):
             triggers = [triggers]
+
+        self.__state = EngineState_Start    
         for trigger in triggers:
             Clock.register(self, trigger)   
 
@@ -63,6 +82,9 @@ class Engine:
         return context
 
     def create_action(self, action_config):
+        """
+        Create an action with its config
+        """
         action_type = action_config['type']
         clz = Action.get_action_class(action_type)
         action = clz()

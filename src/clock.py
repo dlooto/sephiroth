@@ -1,5 +1,5 @@
 
-
+import threading
 from threading import Timer
 
 import time
@@ -49,17 +49,18 @@ class Clock:
                 Clock.follower_map[action_before].append((engine, delay))
             else:
                 Clock.follower_map[action_before] = [(engine, delay)]
-            
+
     @staticmethod
     def on_idle():
-        print('On Idle')
+        # print('On Idle')
+        pass
 
     @staticmethod
     def on_every_second():
         current_second = int(time.time())
         if Clock.last_emit_second == current_second:
             return
-        
+        # 更新每秒的时间
         Clock.last_emit_second = current_second
         
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(current_second))
@@ -68,6 +69,7 @@ class Clock:
             if time_format.match(current_time):
                 print('Trigger on', current_time)
                 match_count += 1
+                print("B ThreadId:", threading.get_ident())
                 engine.run()
         
         if match_count == 0:

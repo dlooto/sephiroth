@@ -3,7 +3,8 @@ import time
 import os
 import sys
 import pytoml as toml
-
+import signal
+import threading
 from engine import *
 from resource import *
 
@@ -39,9 +40,18 @@ def load_configs() -> list:
 
     return configs
 
+def exit_handler(signum, frame):
+    """
+    Quit all the threads when Ctrl+C
+    """
+    sys.exit()
 
 
 def main(configs):
+    """
+    """
+    print("Main-ThreadId:", threading.get_ident())
+    signal.signal(signal.SIGINT, exit_handler)
     Clock.tick()
     
     for config in configs:
