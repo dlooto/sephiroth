@@ -11,5 +11,6 @@ charset="utf8"
 
 
 [logger.global]
-path=""
-switch = "daily" #每天创建一个新的文件
+filename="abc.log"
+path="/Users/healer"
+

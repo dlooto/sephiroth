@@ -5,39 +5,67 @@ import MySQLdb.converters
 
 class Resource:
 
-    global_respurce_map = dict()
+    resource_map = dict()
 
     @staticmethod
     def initialize_global_resources(config):
         for sec in config:
             if sec == 'mysqlconnection':
-                Resource.initialize_mysql_connection('G', config[sec])
+                Resource.initialize_mysql_connection('global', config[sec])
             if sec == 'logger':
-                Resource.initialize_logger('G', config[sec])
+                Resource.initialize_logger('global', config[sec])
             else:
                 pass
 
         print("Global resource initialized")
+
+    @staticmethod
+    def initialize_local_resources(name, config):
+        for sec in config:
+            if sec == 'mysqlconnection':
+                Resource.initialize_mysql_connection(name, config[sec])
+            if sec == 'logger':
+                Resource.initialize_logger(name, config[sec])
+            else:
+                pass
+
+        print("Local resource initialized")        
     
     @staticmethod
-    def initialize_mysql_connection(scope, config):
+    def get_resource_name(config):
         resource_name = list(config.keys())[0]
+        return resource_name
+
+    @staticmethod
+    def initialize_mysql_connection(scope, config):
+        resource_name = Resource.get_resource_name(config)
         config = config[resource_name]
 
         conv = MySQLdb.converters.conversions.copy()
         conv[12] = str
         db = MySQLdb.connect(**config, cursorclass=MySQLdb.cursors.DictCursor, conv=conv)
 
-        Resource.global_respurce_map[resource_name] = db
+        resource_full_name = "%s.%s" % (scope, resource_name)
+        Resource.resource_map[resource_full_name] = db
 
     @staticmethod
     def initialize_logger(scope, config):
         import log
+
+        resource_name = Resource.get_resource_name(config)
+        config = config[resource_name]
         logger = log.Logger(config)
-        logger.init()
-        Resource.global_respurce_map[resource_name] = logger
-        pass
+        # logger.init()
+
+        resource_full_name = "%s.%s" % (scope, resource_name)
+        Resource.resource_map[resource_full_name] = logger
 
     @staticmethod
-    def find_resource(resource_name):
-        return Resource.global_respurce_map[resource_name]
+    def find_global_resource(resource_name):
+        resource_full_name = "global.%s" % resource_name
+        return Resource.resource_map[resource_full_name]
+
+    @staticmethod
+    def find_local_resource(scope, resource_name):
+        resource_full_name = "%s.%s" % (scope, resource_name)
+        return Resource.resource_map[resource_full_name]        

@@ -4,7 +4,9 @@ import time
 from context import *
 from clock import *
 from baseaction import *
+from resource import *
 import threading
+
 
 # EngineState_Init -> EngineState_Start -> EngineState_Running -> EngineState_Waiting
 # -> EngineState_Running
@@ -23,6 +25,8 @@ class Engine:
     def __init__(self, config):
         self.config = config
         self.__state = EngineState_Init
+
+        Resource.initialize_local_resources(self.name, self.config)
 
     def get_state(self):
         return self.__state
@@ -54,7 +58,7 @@ class Engine:
         if isinstance(triggers, str):
             triggers = [triggers]
 
-        self.__state = EngineState_Start    
+        self.__state = EngineState_Start
         for trigger in triggers:
             Clock.register(self, trigger)   
 

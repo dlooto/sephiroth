@@ -7,8 +7,9 @@ name = "cinderella"
 # every-min 00 30
 triggers= ["every-minute 05", "every-minute 15", "every-minute 05", "every-minute 28", "every-minute 35", "every-minute 50"]
 
-[datasource]
-type="mysql"
+[logger.me]
+filename="cind-{$date}.log"
+path="/Users/healer/{$month}"
 
 
 # action.main 是一个执行序列的第一个action
