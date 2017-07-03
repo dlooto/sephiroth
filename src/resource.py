@@ -61,6 +61,14 @@ class Resource:
         Resource.resource_map[resource_full_name] = logger
 
     @staticmethod
+    def find_resource(scope, resource_name):
+        if scope == 'global':
+            return Resource.find_global_resource(resource_name)
+        else:
+            return Resource.find_local_resource(scope, resource_name)
+
+    
+    @staticmethod
     def find_global_resource(resource_name):
         resource_full_name = "global.%s" % resource_name
         return Resource.resource_map[resource_full_name]

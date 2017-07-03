@@ -24,16 +24,13 @@ class Engine:
     
     def __init__(self, config):
         self.config = config
+        self.name = self.config['main']['name']
         self.__state = EngineState_Init
 
         Resource.initialize_local_resources(self.name, self.config)
 
     def get_state(self):
         return self.__state
-
-    @property
-    def name(self):
-        return self.config['main']['name']
 
     def run(self, context=None):
         """
@@ -60,7 +57,8 @@ class Engine:
 
         self.__state = EngineState_Start
         for trigger in triggers:
-            Clock.register(self, trigger)   
+            Clock.register(self, trigger)
+
 
 
     def __run(self, context):
@@ -85,14 +83,14 @@ class Engine:
             self.run_action(action, context)
         return context
 
-    def create_action(self, action_config):
+    def create_action(self, action_name, action_config):
         """
         Create an action with its config
         """
         action_type = action_config['type']
         clz = Action.get_action_class(action_type)
         action = clz()
-        action.set_action_config(action_config)
+        action.set_info(self.name, action_name, self.config)
         return action
 
     def load_actions(self, actions_config):
@@ -102,8 +100,9 @@ class Engine:
         actions = []
 
         action_config = actions_config['main']
+        action_name = 'main'
         while action_config:
-            action = self.create_action(action_config)
+            action = self.create_action(action_name, action_config)
             actions.append(action)
             
             if 'next' not in action_config or action_config['next'] == '':
@@ -112,7 +111,8 @@ class Engine:
             if next_action not in actions_config:
                 raise Exception("No action provided")
             
-            action_config = actions_config[next_action]
+            action_name = next_action
+            action_config = actions_config[action_name]
 
         return actions
 

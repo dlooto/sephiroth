@@ -32,6 +32,7 @@ class Logger:
 
         self.last_log_time = None
         self.chars_count = 0
+        self.lines_count = 0
 
         print(self.config)
         
@@ -83,6 +84,9 @@ class Logger:
     def __write_log_line(self, formatted_time, line):
         #TODO: Log level
         self.chars_count += self.file.write("[%s] %s\n" % (formatted_time, line))
+        self.lines_count += 1
+        if self.lines_count % 10 == 0:
+            self.file.flush()
 
     @staticmethod
     def get_formatted_time():
@@ -98,14 +102,15 @@ class Logger:
         current_second = int(time.time())
         current_time = time.localtime(current_second)
         formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
-
+        
         # 只有日期变了才可能涉及到LoggerSwitch_Monthly或者LoggerSwitch_Daily
         if self.last_log_time and self.last_log_time.tm_yday != current_time.tm_yday:
             if self.switch_policy & LoggerSwitch_Daily:
                 self.check_for_daily()
             elif self.switch_policy & LoggerSwitch_Monthly:
                 self.check_for_monthly()
-
+        
+        
         self.__write_log_line(formatted_time, line)
 
         self.last_log_time = current_time

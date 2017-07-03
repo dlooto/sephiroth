@@ -14,6 +14,7 @@ class HttpGetAction(BaseAction):
         # print(context)
         action_config = self.get_action_config()
         resp = requests.get(action_config['url'])
+        self.log(resp.text)
         context.set_return_value(resp.text)
 
 

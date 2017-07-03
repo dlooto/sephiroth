@@ -10,8 +10,9 @@ class MySQLSelectAction(BaseAction):
         pass
 
     def execute(self, context):
+        self.log("aaaaaa")
         result = None
-        db = Resource.find_resource('mysqlconnection')
+        db = Resource.find_resource('global', 'mysqlconnection')
         with db.cursor() as cursor:
             action_config = self.get_action_config()
             cursor.execute(action_config['sql'])
