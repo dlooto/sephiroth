@@ -64,33 +64,41 @@ class Context:
     def __setitem__(self, key, value):
         self.__dict__[key] = value        
 
+    def set_engine(self, engine):
+        self.engine = engine
+
+    def get_engine_var(self, var):
+        if self.engine:
+            return self.engine.get_value(var)
+        return None
+
     def set_return_value(self, return_value):
         self.return_value = return_value
 
     def eval_val(self, val):
         if val[0] == '@':
-            pass
-        elif val[0] == '$':
+            if val[1] == '@':   # @@val
+                return self.get_engine_var(val[2:])
+            else:   # @val
+                pass
+        elif val[0] == '$': # $current_seconds
             return self[val]
 
     def evaluate(self, expr):
+        """
+        eval the expr, 1. Append to an array; 2. join
+        """
         vals = get_val_str_list(expr)
         last_begin = 0
         a = []
         for val, begin, end in vals:
             v = self.eval_val(val)
-            print("V=", v)
             a.append(expr[last_begin: begin])
             a.append(str(v))
             last_begin = end + 1
         a.append(expr[last_begin:])
 
-        print("".join(a))
-
-
-            # print(self.return_value)
-        # obj = json.loads(self.return_value)
-        return self.return_value
+        return "".join(a)
 
     def __str__(self):
         

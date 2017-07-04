@@ -26,6 +26,7 @@ class Engine:
         self.config = config
         self.name = self.config['main']['name']
         self.__state = EngineState_Init
+        self.vars = dict()
 
         Resource.initialize_local_resources(self.name, self.config)
 
@@ -46,10 +47,18 @@ class Engine:
             # Keep the context for the follower engines
             Clock.trigger_followers(Engine.run, self, context)
 
+    def initialize_vars(self, vars):
+        for key, value in vars.items():
+            self.vars[key] = value
+
     def start(self):
         """
         """
         
+        if 'vars' in self.config:
+            self.initialize_vars(self.config['vars'])
+
+
         # TODO: Register Engine in clock.tick for very 30 s
         triggers = self.config['main']['triggers']
         if isinstance(triggers, str):
@@ -75,6 +84,8 @@ class Engine:
         if not context:
             print('Create new context')
             context = Context()
+
+        context.set_engine(self)
         actions = self.load_actions(actions_config)
 
         for action in actions:
@@ -123,7 +134,19 @@ class Engine:
         print("-" * 40)
         action.execute(context)
 
-        
+    
+    def get_value(self, key, default_value=None):
+        """
+
+        """
+        print("?", self.vars)
+        if key in self.vars: 
+            return self.vars[key]
+        else:
+            return default_value
+
+    def set_value(self, key, value):
+        self.vars[key] = value
 
         
         
