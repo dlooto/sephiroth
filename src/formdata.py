@@ -3,7 +3,7 @@
 
 from baseaction import *
 
-@Action.register("resultset_to_form")
+@Actions.register("resultset_to_form")
 class ResultSetToFormAction(BaseAction):
     
 

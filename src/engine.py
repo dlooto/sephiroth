@@ -88,7 +88,7 @@ class Engine:
         Create an action with its config
         """
         action_type = action_config['type']
-        clz = Action.get_action_class(action_type)
+        clz = Actions.get_action_class(action_type)
         action = clz()
         action.set_info(self.name, action_name, self.config)
         return action

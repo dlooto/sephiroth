@@ -15,7 +15,7 @@ path="/Users/healer/{$month}"
 [action.main]
 type = "mysql_select"
 mysqlconnection="mysqlconnection"
-sql = "select * from z_cinderella_rec"# where data_time={$current_time}"
+sql = "select * from z_cinderella_rec where data_time={$current_seconds} - 5 and data_time = '{$now}';"
 next = "transform"
 logto = "me"
 loglevel = 1

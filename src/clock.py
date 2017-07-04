@@ -1,7 +1,7 @@
 
 import threading
 from threading import Timer
-
+from context import *
 import time
 import re
 
@@ -61,6 +61,7 @@ class Clock:
         if Clock.last_emit_second == current_second:
             return
         # 更新每秒的时间
+        Context.set_time(current_second)
         Clock.last_emit_second = current_second
         
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(current_second))

@@ -1,20 +1,20 @@
 
 from resource import *
 
-class Action:
+class Actions:
 
     action_classes = dict()
 
     @staticmethod
     def register(action_type):
         def action_class(action_clz):
-            Action.action_classes[action_type] = action_clz
+            Actions.action_classes[action_type] = action_clz
         return action_class
 
     @staticmethod
     def get_action_class(action_type):
-        if action_type in Action.action_classes:
-            return Action.action_classes[action_type]
+        if action_type in Actions.action_classes:
+            return Actions.action_classes[action_type]
         raise Exception("No action[%s] register" % action_type)
 
 
@@ -48,20 +48,13 @@ class BaseAction:
         if 'logto' not in self.action_config:
             return # Log nothing if No logto field
         logto = self.action_config['logto']
-        print("LogTo", logto)
+        # print("LogTo", logto)
         
         logger = Resource.find_resource(self.engine_name, logto)
         if logger:
-            print("LOG IT")
             logger.write(line)
-            print("LOG IT")
         else:
             print(self.engine_name, logto)
-            print(Resource.resource_map)
-
-
-
-
 
     def execute(self, context):
         raise Exception('No derived class implemention?')

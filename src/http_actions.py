@@ -3,7 +3,7 @@ from baseaction import *
 import requests
 import json
 
-@Action.register("http_get")
+@Actions.register("http_get")
 class HttpGetAction(BaseAction):
     """
     """
@@ -18,7 +18,7 @@ class HttpGetAction(BaseAction):
         context.set_return_value(resp.text)
 
 
-@Action.register("http_post")
+@Actions.register("http_post")
 class HttpPostAction(BaseAction):
     """
     """

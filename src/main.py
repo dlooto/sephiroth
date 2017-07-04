@@ -40,10 +40,14 @@ def load_configs() -> list:
 
     return configs
 
+def flush_all_logs():
+    pass
+
 def exit_handler(signum, frame):
     """
     Quit all the threads when Ctrl+C
     """
+    flush_all_logs()
     sys.exit()
 
 
