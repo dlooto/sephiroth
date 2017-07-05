@@ -9,8 +9,7 @@ class MySQLSelectAction(BaseAction):
     def __init__(self):
         pass
 
-    def execute(self, context):
-        self.log("aaaaaa")
+    def execute(self, context):        
         result = None
         db = Resource.find_resource('global', 'mysqlconnection')
         with db.cursor() as cursor:
@@ -19,4 +18,7 @@ class MySQLSelectAction(BaseAction):
             print("###", sql)
             cursor.execute(sql)
             result = cursor.fetchall()
-            context.set_return_value(result)
+            return_var = '_r'
+            if 'return' in action_config:
+                return_var = action_config['return']
+            context.set_context_value(return_var, result)

@@ -34,35 +34,30 @@ def get_val_str_list(line):
 class Context:
 
     def __init__(self):
-        self.return_value = None
+        self.vars = dict()
+        self.last_return_value = None
 
     # All context share one current_time in seconds
     @staticmethod
     def set_time(current_time):
         Context.current_time = current_time
-
-    def get_time(self):
+    
+    @staticmethod
+    def get_time():
         return Context.current_time
 
-    def __getitem__(self, key):
-        """
-        TODO: 
-        """
-        if key == '$current_seconds':
-            return self.get_time()
-        elif key == '$pid':
+    @staticmethod
+    def get_global_var_value(var):
+        if var == '$current_seconds':
+            return Context.get_time()
+        elif var == '$pid':
             return os.getpid()
-        elif key == '$today':
-            return time.strftime('%Y-%m-%d', time.localtime(self.get_time()))
-        elif key == '$now':
-            return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.get_time()))
-
-        if key in self.__dict__:
-            return self.__dict__[key]
-        raise Exception("No attr %s" % key)
-
-    def __setitem__(self, key, value):
-        self.__dict__[key] = value        
+        elif var == '$today':
+            return time.strftime('%Y-%m-%d', time.localtime(Context.get_time()))
+        elif var == '$now':
+            return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(Context.get_time()))
+        else:
+            return None
 
     def set_engine(self, engine):
         self.engine = engine
@@ -72,17 +67,27 @@ class Context:
             return self.engine.get_value(var)
         return None
 
+    def set_context_var(self, var, value):
+        self.vars[var] = value
+        self.last_return_value = value
+
+    def get_context_var(self, var):
+        return self.vars[var]
+
+    def get_last_return_value(self):
+        return self.last_return_value
+
     def set_return_value(self, return_value):
         self.return_value = return_value
 
-    def eval_val(self, val):
-        if val[0] == '@':
-            if val[1] == '@':   # @@val
-                return self.get_engine_var(val[2:])
+    def eval_val(self, var):
+        if var[0] == '@':
+            if var[1] == '@':   # @@val for engine var
+                return self.get_engine_var(var[2:])
             else:   # @val
-                pass
-        elif val[0] == '$': # $current_seconds
-            return self[val]
+                return self.get_context_var(var[1:])
+        elif var[0] == '$': # $current_seconds
+            return Context.get_global_var_value(var)
 
     def evaluate(self, expr):
         """

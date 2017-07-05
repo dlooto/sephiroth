@@ -21,6 +21,7 @@ type = "mysql_select"
 mysqlconnection="mysqlconnection"
 sql = "select * from z_cinderella_rec where time={$current_seconds} - 5 and status = '{@@a}';"
 next = "transform"
+return = "result_set"
 logto = "me"
 loglevel = 1
 
@@ -38,7 +39,7 @@ key_value_attributes = [
     ["Sid", "sid", ""],
     ["Time", "dataTime", "unixtime"],
     ]
-input = "$"
+input = "result_set"
 output = "$"
 next = "post"
 
