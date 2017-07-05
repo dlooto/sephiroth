@@ -28,10 +28,13 @@ class HttpPostAction(BaseAction):
 
     def execute(self, context):
         action_config = self.get_action_config()
-        data = context.eval(action_config['data'])
-        print("--" * 40)
-        # print(data)
-        # data = self.convert_to_form(data)
+        # TODO:
+        param0 = '_r'
+        if 'param0' in action_config:
+            param0 = action_config['param0']
+
+        data = context.get_context_var(param0)
+        
         post_url = action_config['url']
         resp = requests.post(post_url, data=data)
-        print(resp.text)
+        self.log(resp.text)

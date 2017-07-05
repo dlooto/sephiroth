@@ -4,10 +4,10 @@
 name = "cinderella"
 
 # every-min 00 30
-triggers= ["every-minute 05", "every-minute 15", "every-minute 05", "every-minute 28", "every-minute 35", "every-minute 50"]
+triggers = ["every-minute 05", "every-minute 25", "every-minute 35", "every-minute 55"]
 
 [vars]
-a = 1
+offset_seconds = 5
 b = ["1", "hello"]
 
 [logger.me]
@@ -19,7 +19,7 @@ path="/Users/healer/{$month}"
 [action.main]
 type = "mysql_select"
 mysqlconnection="mysqlconnection"
-sql = "select * from z_cinderella_rec where time={$current_seconds} - 5 and status = '{@@a}';"
+sql = "select * from z_cinderella_rec where time=from_unixtime({$current_seconds} - {@@offset_seconds});"
 next = "transform"
 return = "result_set"
 logto = "me"
@@ -39,14 +39,14 @@ key_value_attributes = [
     ["Sid", "sid", ""],
     ["Time", "dataTime", "unixtime"],
     ]
-input = "result_set"
-output = "$"
+param0 = "result_set"
+return = "form"
 next = "post"
 
 [action.post]
 type = "http_post"
 url = "http://127.0.0.1:1024/d/send/2"
-data = "$"
+param0 = "form"
 next = ""
 
 

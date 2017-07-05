@@ -43,6 +43,18 @@ class ResultSetToFormAction(BaseAction):
                 continue
             key_value_attributes_map[a[0]] = a[1:]
         
-        data = context.eval(action_config)
+        # TODO: Refactor
+        param0 = '_r'
+        if 'param0' in action_config:
+            param0 = action_config['param0']
+        data = context.get_context_var(param0)
+        print("ResultSet", data)
         value = self.result_set_to_form_data(data, key_value_attributes_map)
-        context.set_return_value(value)
+        
+        print("FormData:", value)
+        # TODO: Refactor
+        return_var = '_r'
+        if 'return' in action_config:
+            return_var = action_config['return']
+
+        context.set_context_var(return_var, value)

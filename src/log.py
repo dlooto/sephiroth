@@ -85,7 +85,7 @@ class Logger:
         #TODO: Log level
         self.chars_count += self.file.write("[%s] %s\n" % (formatted_time, line))
         self.lines_count += 1
-        if self.lines_count % 10 == 0:
+        if self.lines_count % 1 == 0:
             self.file.flush()
 
     @staticmethod
