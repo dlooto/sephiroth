@@ -12,13 +12,14 @@ require = ["cinderella.sub.toml"]
 [action.main]
 type = "http_get"
 url = "http://127.0.0.1:1024/d/cmd/history/{$cinderella_device_id}"
-return = "lost_data"
+return_json = "lost_data"
 next = "selectlost"
+exit_at = "{@lost_data.status} != 0"
 
 [action.selectlost]
 type = "mysql_select"
 mysqlconnection="mysqlconnection"
-sql = "select * from z_cinderella_rec where time in ({@lost_data});"
+sql = "select * from z_cinderella_rec where time in ({@lost_data.data.list});"
 next = "transform"
 return = "result_set"
 

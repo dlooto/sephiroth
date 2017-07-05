@@ -79,7 +79,13 @@ class Context:
         self.last_return_value = value
 
     def get_context_var(self, var):
-        return self.vars[var]
+        """
+        """
+        ps = var.split('.')
+        v = self.vars
+        for p in ps:
+            v = v[p]
+        return v
 
     def get_last_return_value(self):
         return self.last_return_value

@@ -29,6 +29,9 @@ class Engine:
         self.vars = dict()
 
         Resource.initialize_local_resources(self.name, self.config)
+    
+    def __str__(self):
+        return "%s@%d" % (self.name, self.__state)
 
     def get_state(self):
         return self.__state
@@ -41,7 +44,7 @@ class Engine:
             print("ThreadId:", threading.get_ident())
             context = self.__run(context)
         except Exception as e:
-            print("Exception:", e.with_traceback())
+            print("Exception:", e)
         finally:
             self.__state = EngineState_Waiting
             # Keep the context for the follower engines
@@ -132,6 +135,7 @@ class Engine:
         """
         # TODO: Log
         print("-" * 40)
+        
         action.execute(context)
 
     

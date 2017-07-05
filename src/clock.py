@@ -68,10 +68,10 @@ class Clock:
         match_count = 0
         for (time_format, engine) in Clock.time_format_engine_list:
             if time_format.match(current_time):
-                print('Trigger on', current_time)
+                print('[%s]! %s' % (current_time, engine))
                 match_count += 1
-                print("B ThreadId:", threading.get_ident())
                 engine.run()
+
         
         if match_count == 0:
             Clock.on_idle()
