@@ -1,11 +1,11 @@
 
 [main]
-# Interval is 30 seconds
-name = "cinderella"
-require = ["cinderella.sub.toml"]
+name = "cinderella.realtime"
 
-# every-min 00 30
+# 每个30秒, 00秒(归一化时间)后的5秒尝试发送数据
 triggers = ["every-minute 05", "every-minute 25", "every-minute 35", "every-minute 55"]
+
+require = ["cinderella.sub.toml"]
 
 [vars]
 offset_seconds = 5

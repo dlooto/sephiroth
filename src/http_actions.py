@@ -13,9 +13,14 @@ class HttpGetAction(BaseAction):
     def execute(self, context):
         # print(context)
         action_config = self.get_action_config()
-        resp = requests.get(action_config['url'])
+        url = context.evaluate(action_config['url'])
+        
+        resp = requests.get(url)
         self.log(resp.text)
-        context.set_return_value(resp.text)
+        return_var = '_r'
+        if 'return' in action_config:
+            return_var = action_config['return']
+        context.set_context_var(return_var, resp.text)
 
 
 @Actions.register("http_post")
@@ -35,6 +40,6 @@ class HttpPostAction(BaseAction):
 
         data = context.get_context_var(param0)
         
-        post_url = action_config['url']
+        post_url = context.evaluate(action_config['url'])
         resp = requests.post(post_url, data=data)
         self.log(resp.text)

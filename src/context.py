@@ -3,6 +3,9 @@ import json
 import time
 
 def get_val_str(line, begin=0):
+    """
+    Strings parsing to fetch one variable
+    """
     pos = line.find("{", begin)
     if pos < 0:
         return None, -1
@@ -16,6 +19,9 @@ def get_val_str(line, begin=0):
         
 
 def get_val_str_list(line):
+    """
+    Strings parsing
+    """    
     begin = 0
     results = []
     while True:
@@ -57,7 +63,8 @@ class Context:
         elif var == '$now':
             return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(Context.get_time()))
         else:
-            return None
+            import resource
+            return resource.Resource.get_global_var(var)
 
     def set_engine(self, engine):
         self.engine = engine

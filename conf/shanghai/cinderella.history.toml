@@ -1,0 +1,28 @@
+
+
+[main]
+name = "cinderella.history"
+
+# 每分钟尝试获取一次历史数据命令
+triggers = ["every-minute 00"]
+require = ["cinderella.sub.toml"]
+
+
+# action.main 是一个执行序列的第一个action
+[action.main]
+type = "http_get"
+url = "http://127.0.0.1:1024/d/cmd/history/{$cinderella_device_id}"
+return = "lost_data"
+next = "selectlost"
+
+[action.selectlost]
+type = "mysql_select"
+mysqlconnection="mysqlconnection"
+sql = "select * from z_cinderella_rec where time in ({@lost_data});"
+next = "transform"
+return = "result_set"
+
+
+
+
+

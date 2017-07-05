@@ -1,0 +1,26 @@
+
+
+[main]
+name = "cinderella.integrity"
+
+# 每天夜间进行自检
+triggers = ["every-day 15:44:08", "every-day 15:45:06"]
+require = ["cinderella.sub.toml"]
+
+
+# action.main 是一个执行序列的第一个action
+[action.main]
+type = "http_get"
+url = "http://127.0.0.1:1024/d/cmd/integrity/{$cinderella_device_id}"
+return = "lost_data"
+next = "selectlost"
+
+[action.selectlost]
+type = "mysql_select"
+mysqlconnection="mysqlconnection"
+sql = "select * from z_cinderella_rec where time in ({@lost_data});"
+next = "transform"
+return = "result_set"
+
+
+

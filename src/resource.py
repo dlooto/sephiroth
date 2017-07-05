@@ -7,6 +7,8 @@ class Resource:
 
     resource_map = dict()
 
+    variables = dict()
+
     @staticmethod
     def initialize_global_resources(config):
         for sec in config:
@@ -14,6 +16,8 @@ class Resource:
                 Resource.initialize_mysql_connection('global', config[sec])
             if sec == 'logger':
                 Resource.initialize_logger('global', config[sec])
+            if sec == 'vars':
+                Resource.initialize_variables('global', config[sec])
             else:
                 pass
 
@@ -59,6 +63,17 @@ class Resource:
 
         resource_full_name = "%s.%s" % (scope, resource_name)
         Resource.resource_map[resource_full_name] = logger
+
+    @staticmethod
+    def initialize_variables(scope, config):
+        for var, value in config.items():
+            Resource.variables['$' + var] = value
+        
+    @staticmethod
+    def get_global_var(var):
+        if var in Resource.variables:
+            return Resource.variables[var]
+        return None
 
     @staticmethod
     def find_resource(scope, resource_name):

@@ -19,3 +19,5 @@ port=6379
 filename="abc.log"
 path="/Users/healer"
 
+[vars]
+cinderella_device_id=2

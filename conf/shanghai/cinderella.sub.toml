@@ -20,6 +20,6 @@ next = "post"
 
 [action.post]
 type = "http_post"
-url = "http://127.0.0.1:1024/d/send/2"
+url = "http://127.0.0.1:1024/d/send/{$cinderella_device_id}"
 param0 = "form"
 next = ""

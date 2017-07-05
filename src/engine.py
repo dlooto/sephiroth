@@ -137,9 +137,8 @@ class Engine:
     
     def get_value(self, key, default_value=None):
         """
-
+        
         """
-        print("?", self.vars)
         if key in self.vars: 
             return self.vars[key]
         else:

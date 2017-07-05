@@ -10,20 +10,24 @@ from resource import *
 
 
 def get_requires(config):
+    """
+    Get require sub toml files list
+    """
     if 'main' in config and 'require' in config['main']:
         return config['main']['require']
     return []
 
 def merge_config(config, required_config):
+    """
+    """
     for key, value in required_config.items():
         if key == '__filename__':
             continue
         if key not in config:
             config[key] = value
         else:
-            print(key, config[key])
             config[key].update(value)
-    return config
+
 
 def load_config(filename) -> dict:
     """
@@ -64,7 +68,6 @@ def load_configs() -> list:
         requires = get_requires(config)
         if len(requires) > 0:
             for require in requires:
-                print("require!!!", require)
                 merge_config(config, config_map[require])
 
     return config_map.values()
@@ -95,19 +98,15 @@ def main(configs):
         # Ignore the global resource file
         if config['__filename__'] == 'global.toml':
             continue
-
-        if 'main' not in config:    # required toml would NOT have main section
+        
+        # required toml would NOT have main section
+        if 'main' not in config:
             continue
         
-        print(config)
+        # Start an engine with its config including main section only.
         e = Engine(config)
         e.start()
 
 if __name__ == '__main__':
     configs = load_configs()
-    for config in configs:
-        print('-' * 40)
-        print(config)
-        print('-' * 40)
-
     main(configs)
