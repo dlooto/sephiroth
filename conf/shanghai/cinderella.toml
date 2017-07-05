@@ -2,6 +2,7 @@
 [main]
 # Interval is 30 seconds
 name = "cinderella"
+require = ["cinderella.sub.toml"]
 
 # every-min 00 30
 triggers = ["every-minute 05", "every-minute 25", "every-minute 35", "every-minute 55"]
@@ -25,29 +26,7 @@ return = "result_set"
 logto = "me"
 loglevel = 1
 
-[action.transform]
-type = "resultset_to_form"
-key_value_attributes = [
-    ["PressureDiff", "pressureDiff", ""],
-    ["Pressure", "pressure", ""],
-    ["Temperature", "temperature", ""],
-    ["FlowPerHour", "flowPerHour", ""],
-    ["Flow", "flow", ""],
-    ["Worktime", "workTime", ""],
-    ["BeginTime", "beginTime", "unixtime"],
-    ["Barcode", "barcode", ""],
-    ["Sid", "sid", ""],
-    ["Time", "dataTime", "unixtime"],
-    ]
-param0 = "result_set"
-return = "form"
-next = "post"
-
-[action.post]
-type = "http_post"
-url = "http://127.0.0.1:1024/d/send/2"
-param0 = "form"
-next = ""
+# Goto sub toml
 
 
 
