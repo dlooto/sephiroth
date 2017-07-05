@@ -1,6 +1,7 @@
 
 import json
 import time
+from functools import reduce
 
 def get_val_str(line, begin=0):
     """
@@ -53,6 +54,16 @@ class Context:
         return Context.current_time
 
     @staticmethod
+    def get_funcs(func_names):
+        funcs = []
+        for func_name in func_names:
+            if func_name == 'join':
+                funcs.append( lambda x: ",".join(x) )
+            if func_name == 'stringify':
+                funcs.append( lambda x: [str(i) for i in x] )
+        return funcs
+
+    @staticmethod
     def get_global_var_value(var):
         if var == '$current_seconds':
             return Context.get_time()
@@ -93,7 +104,18 @@ class Context:
     def set_return_value(self, return_value):
         self.return_value = return_value
 
-    def eval_val(self, var):
+    def eval_expr(self, expr):
+        if '|' not in expr:
+            return self.eval_var(expr)
+        else:
+            ps = expr.split('|')
+            v = self.eval_var(ps[0].strip())
+            funcs = Context.get_funcs(ps[1:])
+            v = reduce(lambda x, y: y(x), funcs, v)
+            
+            return v
+
+    def eval_var(self, var):
         if var[0] == '@':
             if var[1] == '@':   # @@val for engine var
                 return self.get_engine_var(var[2:])
@@ -110,7 +132,7 @@ class Context:
         last_begin = 0
         a = []
         for val, begin, end in vals:
-            v = self.eval_val(val)
+            v = self.eval_expr(val)
             a.append(expr[last_begin: begin])
             a.append(str(v))
             last_begin = end + 1

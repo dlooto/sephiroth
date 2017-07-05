@@ -19,7 +19,8 @@ exit_at = "{@lost_data.status} != 0"
 [action.selectlost]
 type = "mysql_select"
 mysqlconnection="mysqlconnection"
-sql = "select * from z_cinderella_rec where time in ({@lost_data.data.list});"
+# TODO: 优化UNIX_TIMESTAMP, 现在用不到Time字段的索引了
+sql = "select * from z_cinderella_rec where UNIX_TIMESTAMP(time) in ({@lost_data.data.list|stringify|join});"
 next = "transform"
 return = "result_set"
 
