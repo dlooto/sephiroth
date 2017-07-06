@@ -43,19 +43,26 @@ class Engine:
             self.__state = EngineState_Running
             print("ThreadId:", threading.get_ident())
             context = self.__run(context)
+            
+            # trigger the followers
+            Clock.trigger_followers(Engine.run, self, context)
         except Exception as e:
-            print("Exception:", e)
             print_exception = Resource.get_global_var('$print_exception')
             if print_exception == 1:
                 print(traceback.format_exc())
+            else:
+                print("Exception:", e)
         finally:
             self.__state = EngineState_Waiting
             # Keep the context for the follower engines
-            Clock.trigger_followers(Engine.run, self, context)
 
+    # !
     def initialize_vars(self, vars):
+        """
+        """
         for key, value in vars.items():
             self.vars[key] = value
+
 
     def start(self):
         """
