@@ -9,7 +9,7 @@ require = ["cinderella.sub.toml"]
 
 [vars]
 offset_seconds = 5
-b = ["1", "hello"]
+
 
 [logger.me]
 filename="cind-{$date}.log"
@@ -23,6 +23,7 @@ mysqlconnection="mysqlconnection"
 sql = "select * from z_cinderella_rec where time=from_unixtime({$current_seconds} - {@@offset_seconds});"
 next = "transform"
 return = "result_set"
+exit_at = "len({@result_set}) == 0"
 logto = "me"
 loglevel = 1
 

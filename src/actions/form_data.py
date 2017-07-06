@@ -1,7 +1,5 @@
 
-
-
-from baseaction import *
+from .base_action import *
 
 @Actions.register("resultset_to_form")
 class ResultSetToFormAction(BaseAction):
@@ -53,8 +51,6 @@ class ResultSetToFormAction(BaseAction):
         
         print("FormData:", value)
         # TODO: Refactor
-        return_var = '_r'
-        if 'return' in action_config:
-            return_var = action_config['return']
+        return_var = self.get_return_var_name()
 
         context.set_context_var(return_var, value)

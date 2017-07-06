@@ -8,6 +8,11 @@ import threading
 from engine import *
 from resource import *
 
+from actions import *
+
+clz = Actions.get_action_class('read_file')
+print(clz, clz())
+
 
 def get_requires(config):
     """
@@ -44,10 +49,10 @@ def load_configs() -> list:
     """    
     config_path_base = "../conf/"
     with open(config_path_base + "select.toml", "rb") as file:
-        config = toml.load(file)
+        main_config = toml.load(file)
         # print(config)
 
-    config_path = config_path_base + config['path']
+    config_path = config_path_base + main_config['path']
     if not os.path.exists(config_path):
         return []
     
@@ -56,8 +61,16 @@ def load_configs() -> list:
     for fs in os.walk(config_path):
         for file in fs[2]:
             # Ignore the unused toml files
-            if file.startswith('!'):
-                continue
+
+            skip = False
+            if 'exclude' in main_config:
+                for exclude in main_config['exclude']:
+                    if re.match(exclude, file):
+                        skip = True
+                        break
+
+            if file.startswith('!') or skip:
+                continue                
 
             config = load_config(os.path.join(fs[0], file))
             config['__filename__'] = file

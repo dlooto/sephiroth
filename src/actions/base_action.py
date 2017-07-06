@@ -27,8 +27,11 @@ class BaseAction:
     def set_global_resources(self, global_resources):
         self.global_resources = global_resources
 
-    def lookup_resource(self, resource_name):
-        pass
+    def get_return_var_name(self):
+        return_var_name = '_r'
+        if 'return' in self.action_config:
+            return_var_name = self.action_config['return']
+        return return_var_name
 
     def get_name(self, action_name):
         return self.action_name
@@ -65,9 +68,3 @@ class BaseAction:
             expr = context.evaluate(exit_at)
             if eval(expr):
                 raise Exception("exit at %s" % exit_at)        
-        
-
-
-from http_actions import *
-from mysqlselectaction import *
-from formdata import *      

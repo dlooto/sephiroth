@@ -1,0 +1,17 @@
+
+[main]
+name = "hpge.realtime"
+triggers = ["every-minute 10", "every-minute 40"]
+
+
+# action.main 是一个执行序列的第一个action
+[action.main]
+type = "find_files"
+next = "postfile"
+return = "filename"
+
+[action.postfile]
+type = "http_post_file"
+param0="filename"
+url = "http://127.0.0.1:1024/d/file/10?fileType=hpge&folder=444"
+next = ""

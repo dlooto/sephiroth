@@ -1,5 +1,5 @@
 
-from baseaction import *
+from .base_action import *
 from resource import *
 import MySQLdb.cursors
 
@@ -9,7 +9,7 @@ class MySQLSelectAction(BaseAction):
     def __init__(self):
         pass
 
-    def execute(self, context):        
+    def execute(self, context):
         result = None
         db = Resource.find_resource('global', 'mysqlconnection')
         with db.cursor() as cursor:
@@ -19,7 +19,6 @@ class MySQLSelectAction(BaseAction):
             self.log(sql)
             cursor.execute(sql)
             result = cursor.fetchall()
-            return_var = '_r'
-            if 'return' in action_config:
-                return_var = action_config['return']
+            
+            return_var = self.get_return_var_name()
             context.set_context_var(return_var, result)
