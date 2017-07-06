@@ -16,6 +16,15 @@ Notice: If you set same trigger (or ) for one engine, it would trigger more than
 And here is the function build-in.
 join
 stringify
+split
+first
+last
+shift
+pop
+For example:
+{@some_variable.data.list | stringify | join | split | first}
+
+# 
 
 
 

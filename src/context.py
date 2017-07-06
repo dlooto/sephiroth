@@ -67,6 +67,12 @@ class Context:
                 funcs.append( lambda x: x[0] )
             elif func_name == 'last':
                 funcs.append( lambda x: x[-1] )
+            elif func_name == 'shift':
+                funcs.append( lambda x: x[1:] )
+            elif func_name == 'pop':
+                funcs.append( lambda x: x[:-1] )
+            elif func_name == 'reverse':
+                funcs.append( lambda x: x[::-1] )                
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs

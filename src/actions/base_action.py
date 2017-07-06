@@ -2,15 +2,22 @@
 from resource import *
 
 class Actions:
-
+    """
+    Hold the registered class object
+    """
     action_classes = dict()
 
+    #
     @staticmethod
     def register(action_type):
+        """
+        Create a derived-action-class instance should use get_action_class()
+        """
         def action_class(action_clz):
             Actions.action_classes[action_type] = action_clz
         return action_class
 
+    #
     @staticmethod
     def get_action_class(action_type):
         if action_type in Actions.action_classes:
@@ -43,6 +50,9 @@ class BaseAction:
         return self.action_name
 
     def set_info(self, engine_name, action_name, config):
+        """
+        This function should be called in advanced.
+        """
         self.config = config
         self.engine_name = engine_name
         self.action_name = action_name
@@ -71,5 +81,7 @@ class BaseAction:
         if 'exit_at' in action_config:
             exit_at = action_config['exit_at']
             expr = context.evaluate(exit_at)
+            # If the express returns True, 
+            # throw Exception to finish the whole execution of the pipeline.
             if eval(expr):
                 raise Exception("exit at %s" % exit_at)        

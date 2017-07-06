@@ -37,6 +37,7 @@ class ResultSetToFormAction(BaseAction):
 
     def execute(self, context):
         action_config = self.get_action_config()
+        # Mapping of src table fields => dest table fields
         key_value_attributes = action_config['key_value_attributes']
 
         key_value_attributes_map = dict()
@@ -45,7 +46,6 @@ class ResultSetToFormAction(BaseAction):
                 continue
             key_value_attributes_map[a[0]] = a[1:]
         
-        # TODO: Refactor
         param0 = self.get_param_var_name()
 
         data = context.get_context_var(param0)
