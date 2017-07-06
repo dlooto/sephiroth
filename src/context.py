@@ -28,7 +28,6 @@ def get_val_str_list(line):
     while True:
         v, pos = get_val_str(line, begin)
         offset = 0
-        # print(v, pos)
         if v:
             results.append((v, pos, pos + len(v) + 1))
             offset = len(v)

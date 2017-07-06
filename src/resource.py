@@ -4,10 +4,11 @@ import MySQLdb.cursors
 import MySQLdb.converters
 
 class Resource:
-
+    #
     resource_map = dict()
 
-    variables = dict()
+    #
+    global_variables = dict()
 
     @staticmethod
     def initialize_global_resources(config):
@@ -17,7 +18,7 @@ class Resource:
             if sec == 'logger':
                 Resource.initialize_logger('global', config[sec])
             if sec == 'vars':
-                Resource.initialize_variables('global', config[sec])
+                Resource.initialize_global_variables('global', config[sec])
             else:
                 pass
 
@@ -33,7 +34,7 @@ class Resource:
             else:
                 pass
 
-        print("Local resource initialized")        
+        print("Local resource initialized for %s" % name)   
     
     @staticmethod
     def get_resource_name(config):
@@ -65,14 +66,14 @@ class Resource:
         Resource.resource_map[resource_full_name] = logger
 
     @staticmethod
-    def initialize_variables(scope, config):
+    def initialize_global_variables(scope, config):
         for var, value in config.items():
-            Resource.variables['$' + var] = value
+            Resource.global_variables['$' + var] = value
         
     @staticmethod
     def get_global_var(var):
-        if var in Resource.variables:
-            return Resource.variables[var]
+        if var in Resource.global_variables:
+            return Resource.global_variables[var]
         return None
 
     @staticmethod
@@ -82,7 +83,7 @@ class Resource:
         else:
             return Resource.find_local_resource(scope, resource_name)
 
-    
+
     @staticmethod
     def find_global_resource(resource_name):
         resource_full_name = "global.%s" % resource_name

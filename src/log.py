@@ -10,7 +10,7 @@ LoggerSwitch_Restart    = 4
 
 class Logger:
     """
-    if filename contains {$date}, means switch log file daily, 
+    if filename contains {$date}, means switch log file daily,
     if filename contains {$month}, means switch log file monthly,
     if filename contains {$pid}, means switch log file when restart, NOT appending
     
@@ -34,8 +34,6 @@ class Logger:
         self.chars_count = 0
         self.lines_count = 0
 
-        print(self.config)
-        
         self.switch_policy = LoggerSwitch_None
         self.filename_pattern = os.path.join(self.config['path'], self.config['filename'])
         if '{$date}' in self.filename_pattern:
@@ -116,12 +114,10 @@ class Logger:
         self.last_log_time = current_time
 
 
-
-
-
+"""
+"""
 if __name__ == '__main__':
     config = {'filename': 'a1-{$date}-#.log', 'path': "/Users/healer/{$month}"}
-    l = Logger(config)
-    print(l)
-    l.write("ddd")
-    l.write("ddd")
+    logger = Logger(config)
+    logger.write("test line")
+    

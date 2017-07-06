@@ -1,7 +1,5 @@
 
 
-
-
 class Converters:
 
     func = dict()
@@ -26,5 +24,5 @@ def formatted_time_to_unixtime(formatted_time):
 def unixtime_to_formatted_time(unixtime):
     pass    
 
-
+# Test code
 # print(Converters.get('unixtime')('2017-07-29 00:11:22'))

@@ -10,9 +10,6 @@ from resource import *
 
 from actions import *
 
-clz = Actions.get_action_class('read_file')
-print(clz, clz())
-
 
 def get_requires(config):
     """
@@ -50,8 +47,8 @@ def load_configs() -> list:
     config_path_base = "../conf/"
     with open(config_path_base + "select.toml", "rb") as file:
         main_config = toml.load(file)
-        # print(config)
-
+    
+    #
     config_path = config_path_base + main_config['path']
     if not os.path.exists(config_path):
         return []
@@ -70,7 +67,7 @@ def load_configs() -> list:
                         break
 
             if file.startswith('!') or skip:
-                continue                
+                continue
 
             config = load_config(os.path.join(fs[0], file))
             config['__filename__'] = file

@@ -57,7 +57,6 @@ class BaseAction:
         if 'logto' not in self.action_config:
             return # Log nothing if No logto field
         logto = self.action_config['logto']
-        # print("LogTo", logto)
         
         logger = Resource.find_resource(self.engine_name, logto)
         if logger:

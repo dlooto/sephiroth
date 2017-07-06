@@ -26,7 +26,7 @@ class Engine:
         self.config = config
         self.name = self.config['main']['name']
         self.__state = EngineState_Init
-        self.vars = dict()
+        self.engine_instance_vars = dict()
 
         Resource.initialize_local_resources(self.name, self.config)
     
@@ -61,13 +61,12 @@ class Engine:
         """
         """
         for key, value in vars.items():
-            self.vars[key] = value
+            self.engine_instance_vars[key] = value
 
 
     def start(self):
         """
         """
-        
         if 'vars' in self.config:
             self.initialize_vars(self.config['vars'])
 
@@ -95,7 +94,6 @@ class Engine:
             print('Engine', self.config['main']['name'])
 
         if not context:
-            print('Create new context')
             context = Context()
 
         context.set_engine(self)
@@ -142,24 +140,21 @@ class Engine:
 
     def run_action(self, action, context):
         """
-        """
-        # TODO: Log
-        print("-" * 40)
-        
+        """        
         action.try_execute(context)
 
     
     def get_value(self, key, default_value=None):
         """
-        
+        Get engine instance variable value
         """
-        if key in self.vars: 
-            return self.vars[key]
+        if key in self.engine_instance_vars:
+            return self.engine_instance_vars[key]
         else:
             return default_value
 
     def set_value(self, key, value):
-        self.vars[key] = value
+        self.engine_instance_vars[key] = value
 
         
         
