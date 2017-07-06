@@ -61,6 +61,14 @@ class Context:
                 funcs.append( lambda x: ",".join(x) )
             if func_name == 'stringify':
                 funcs.append( lambda x: [str(i) for i in x] )
+            if func_name == 'split':
+                funcs.append( lambda x: x.split(',') )
+            if func_name == 'first':
+                funcs.append( lambda x: x[0] )
+            if func_name == 'last':
+                funcs.append( lambda x: x[-1] )
+            else:
+                raise Exception('No this function!')         
         return funcs
 
     @staticmethod
@@ -95,7 +103,10 @@ class Context:
         ps = var.split('.')
         v = self.vars
         for p in ps:
-            v = v[p]
+            if not p.isdigit():
+                v = v[p]
+            else:
+                v = v[int(p)]
         return v
 
     def get_last_return_value(self):
@@ -110,7 +121,7 @@ class Context:
         else:
             ps = expr.split('|')
             v = self.eval_var(ps[0].strip())
-            funcs = Context.get_funcs(ps[1:])
+            funcs = Context.get_funcs(ps[1:].strip())
             v = reduce(lambda x, y: y(x), funcs, v)
             
             return v

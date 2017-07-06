@@ -11,6 +11,14 @@ class ReadFileAction(BaseAction):
     def execute(self, context):
         action_config = self.get_action_config()
         
-        return_var = self.get_return_var_name()
+        param0 = action_config['param0']
+        param0 = context.evaluate(param0)
         
-        context.set_context_var(return_var, "/Users/healer/a.go")
+        with open(param0, 'r') as file:
+            content = file.readlines()
+
+            content = list(map(lambda x: x.strip(), content))
+            
+            return_var = self.get_return_var_name()
+
+            context.set_context_var(return_var, content)
