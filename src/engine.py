@@ -136,7 +136,7 @@ class Engine:
         # TODO: Log
         print("-" * 40)
         
-        action.execute(context)
+        action.try_execute(context)
 
     
     def get_value(self, key, default_value=None):

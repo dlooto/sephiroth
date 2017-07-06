@@ -56,8 +56,16 @@ class BaseAction:
         else:
             print(self.engine_name, logto)
 
-    def execute(self, context):
-        raise Exception('No derived class implemention?')
+    def try_execute(self, context):
+        self.execute(context)
+
+        action_config = self.get_action_config()
+        if 'exit_at' in action_config:
+            exit_at = action_config['exit_at']
+            expr = context.evaluate(exit_at)
+            if eval(expr):
+                raise Exception("exit at %s" % exit_at)        
+        
 
 
 from http_actions import *

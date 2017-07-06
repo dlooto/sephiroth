@@ -23,7 +23,7 @@ mysqlconnection="mysqlconnection"
 sql = "select * from z_cinderella_rec where UNIX_TIMESTAMP(time) in ({@lost_data.data.list|stringify|join});"
 next = "transform"
 return = "result_set"
-
+exit_at = "len({@result_set}) == 0"
 
 
 
