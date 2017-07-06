@@ -12,7 +12,8 @@ require = ["cinderella.sub.toml"]
 [action.main]
 type = "http_get"
 url = "http://127.0.0.1:1024/d/cmd/history/{$cinderella_device_id}"
-return_json = "lost_data"
+return = "lost_data"
+content_type = "json"
 next = "selectlost"
 exit_at = "{@lost_data.status} != 0"
 

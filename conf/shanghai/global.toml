@@ -20,4 +20,6 @@ filename="abc.log"
 path="/Users/healer"
 
 [vars]
+print_exception = 1
 cinderella_device_id=2
+hpge_path = "/Users/healer/Projects/privates/dauphine/examples"

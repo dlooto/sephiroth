@@ -3,7 +3,11 @@ from .base_action import *
 
 @Actions.register("resultset_to_form")
 class ResultSetToFormAction(BaseAction):
-    
+    """
+    Convert a dict into form data
+    {a:1, b:2} => data[a]=1&data[b]=2
+    {{a:1, b:2}, {a:3, b:4}} => data[0][a]=1&data[0][b]=2&data[1][a]=3&data[1][b]=4
+    """
 
     def result_set_to_form_data(self, dict_list, key_value_attributes_map):
         result = dict()
@@ -42,15 +46,13 @@ class ResultSetToFormAction(BaseAction):
             key_value_attributes_map[a[0]] = a[1:]
         
         # TODO: Refactor
-        param0 = '_r'
-        if 'param0' in action_config:
-            param0 = action_config['param0']
+        param0 = self.get_param_var_name()
+
         data = context.get_context_var(param0)
         print("ResultSet", data)
         value = self.result_set_to_form_data(data, key_value_attributes_map)
         
-        print("FormData:", value)
-        # TODO: Refactor
+        # print("FormData:", value)
         return_var = self.get_return_var_name()
 
         context.set_context_var(return_var, value)

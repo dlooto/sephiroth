@@ -11,10 +11,10 @@ class ReadFileAction(BaseAction):
     def execute(self, context):
         action_config = self.get_action_config()
         
-        param0 = action_config['param0']
-        param0 = context.evaluate(param0)
+        param0 = self.get_param_var_name()
+        param0_value = context.evaluate(param0)
         
-        with open(param0, 'r') as file:
+        with open(param0_value, 'r') as file:
             content = file.readlines()
 
             content = list(map(lambda x: x.strip(), content))

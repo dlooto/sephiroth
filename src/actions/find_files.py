@@ -1,17 +1,24 @@
 
 from .base_action import *
+import os
 
 @Actions.register("find_files")
 class FindFilesAction(BaseAction):
     """
     """
 
+    def set_filename(self, context, filename):
+        return_var = self.get_return_var_name()
+        context.set_context_var(return_var, filename) 
+
+
     def execute(self, context):
         action_config = self.get_action_config()
         
-        param0 = action_config['param0']
+        param0 = self.get_param_var_name()
         param0 = context.evaluate(param0)
-        print("@", param0)
-        return_var = self.get_return_var_name()
-        
-        context.set_context_var(return_var, "/Users/healer/a.go")
+        for fs in os.walk(param0):
+            for file in fs[2]:
+                if not file.startswith('!'):
+                    self.set_filename(context, os.path.join(fs[0], file))
+

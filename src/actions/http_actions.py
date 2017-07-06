@@ -14,19 +14,14 @@ class HttpGetAction(BaseAction):
         url = context.evaluate(action_config['url'])
         
         resp = requests.get(url)
-        self.log(resp.text)
-        return_var = '_r'
-        json_decode = False
-        if 'return' in action_config:
-            return_var = action_config['return']
-        elif 'return_json' in action_config:
-            return_var = action_config['return_json']
-            json_decode = True
+        value = resp.text
         
-        context.set_context_var(return_var, resp.text)
-        if json_decode:
-            context.set_context_var(return_var, json.loads(resp.text))
-
+        return_var = self.get_return_var_name()
+                    
+        if 'content_type' in action_config and action_config['content_type'] == 'json':
+            value = json.loads(value)
+        
+        context.set_context_var(return_var, value)
 
 
 @Actions.register("http_post")
@@ -37,9 +32,7 @@ class HttpPostAction(BaseAction):
     def execute(self, context):
         action_config = self.get_action_config()
         # TODO:
-        param0 = '_r'
-        if 'param0' in action_config:
-            param0 = action_config['param0']
+        param0 = self.get_param_var_name()
 
         data = context.get_context_var(param0)
         
@@ -55,14 +48,11 @@ class HttpPostFileAction(BaseAction):
 
     def execute(self, context):
         action_config = self.get_action_config()
-        # TODO:
-        param0 = '_r'
-        if 'param0' in action_config:
-            param0 = action_config['param0']
+        
+        param0 = self.get_param_var_name()
 
         filename = context.evaluate(context.get_context_var(param0))
         with open(filename, 'rb') as file:
-        
             post_url = context.evaluate(action_config['url'])
             resp = requests.post(post_url, files={'file': file})
             print(resp.text)

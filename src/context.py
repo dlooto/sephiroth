@@ -57,18 +57,19 @@ class Context:
     def get_funcs(func_names):
         funcs = []
         for func_name in func_names:
+            func_name = func_name.strip()
             if func_name == 'join':
                 funcs.append( lambda x: ",".join(x) )
-            if func_name == 'stringify':
+            elif func_name == 'stringify':
                 funcs.append( lambda x: [str(i) for i in x] )
-            if func_name == 'split':
+            elif func_name == 'split':
                 funcs.append( lambda x: x.split(',') )
-            if func_name == 'first':
+            elif func_name == 'first':
                 funcs.append( lambda x: x[0] )
-            if func_name == 'last':
+            elif func_name == 'last':
                 funcs.append( lambda x: x[-1] )
             else:
-                raise Exception('No this function!')         
+                raise Exception('No this function %s!' % func_name)         
         return funcs
 
     @staticmethod
@@ -121,7 +122,7 @@ class Context:
         else:
             ps = expr.split('|')
             v = self.eval_var(ps[0].strip())
-            funcs = Context.get_funcs(ps[1:].strip())
+            funcs = Context.get_funcs(ps[1:])
             v = reduce(lambda x, y: y(x), funcs, v)
             
             return v

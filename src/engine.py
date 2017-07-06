@@ -6,7 +6,7 @@ from clock import *
 from actions import *
 from resource import *
 import threading
-
+import traceback
 
 # EngineState_Init -> EngineState_Start -> EngineState_Running -> EngineState_Waiting
 # -> EngineState_Running
@@ -45,6 +45,9 @@ class Engine:
             context = self.__run(context)
         except Exception as e:
             print("Exception:", e)
+            print_exception = Resource.get_global_var('$print_exception')
+            if print_exception == 1:
+                print(traceback.format_exc())
         finally:
             self.__state = EngineState_Waiting
             # Keep the context for the follower engines

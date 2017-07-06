@@ -4,17 +4,16 @@ name = "hpge.realtime"
 triggers = ["every-minute 10", "every-minute 40"]
 
 
-
 [action.main]
 type = "read_file"
-param0 = "/Users/healer/sid"
+param0 = "{$hpge_path}/sid"
 next = "find"
 return = "content"
 
 
 [action.find]
 type = "find_files"
-param0 = "/Users/healer/{@content.0|split|last}"
+param0 = "{$hpge_path}/{@content.0|split|last}"
 next = "postfile"
 return = "filename"
 

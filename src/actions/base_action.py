@@ -27,6 +27,12 @@ class BaseAction:
     def set_global_resources(self, global_resources):
         self.global_resources = global_resources
 
+    def get_param_var_name(self, index=0):
+        p = 'param%d' % index
+        if p in self.action_config:
+            return self.action_config[p]
+        return None
+
     def get_return_var_name(self):
         return_var_name = '_r'
         if 'return' in self.action_config:
