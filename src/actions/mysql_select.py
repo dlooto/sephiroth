@@ -5,9 +5,11 @@ import MySQLdb.cursors
 
 @Actions.register("mysql_select")
 class MySQLSelectAction(BaseAction):
+    """
+    :param sql || string
+    :param mysqlconnection || string
+    """
 
-    def __init__(self):
-        pass
 
     def execute(self, context):
         result = None

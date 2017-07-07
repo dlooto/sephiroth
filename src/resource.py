@@ -15,6 +15,8 @@ class Resource:
         for sec in config:
             if sec == 'mysqlconnection':
                 Resource.initialize_mysql_connection('global', config[sec])
+            if sec == 'redisclient':
+                Resource.initialize_redis_client('global', config[sec])                
             if sec == 'logger':
                 Resource.initialize_logger('global', config[sec])
             if sec == 'vars':

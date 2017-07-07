@@ -31,6 +31,24 @@ class BaseAction:
     def __init__(self):
         pass
 
+    def print_doc(self):
+        print(self.__doc__)
+
+    def __precheck(self, lines):
+        for line in lines:
+            if line.startswith(':param'):
+                param = line[7:]
+                print(param)
+
+
+    def precheck(self):
+        doc = self.__doc__
+        if not doc:
+            return False
+        lines = list(filter(lambda x: len(x) > 0, map(lambda x: x.strip(), doc.split('\n'))))
+        return self.__precheck(lines)
+
+
     def set_global_resources(self, global_resources):
         self.global_resources = global_resources
 
@@ -51,7 +69,7 @@ class BaseAction:
 
     def set_info(self, engine_name, action_name, config):
         """
-        This function should be called in advanced.
+        This function should be invoked in advanced.
         """
         self.config = config
         self.engine_name = engine_name

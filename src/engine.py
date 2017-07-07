@@ -140,7 +140,9 @@ class Engine:
 
     def run_action(self, action, context):
         """
-        """        
+        """
+        if action.precheck():
+            pass
         action.try_execute(context)
 
     

@@ -3,13 +3,16 @@ from .base_action import *
 import requests
 import json
 
+
 @Actions.register("http_get")
 class HttpGetAction(BaseAction):
     """
+    :param url || string || @required
+    :param content_type || string || @optional
     """
     
     def execute(self, context):
-        # print(context)
+
         action_config = self.get_action_config()
         url = context.evaluate(action_config['url'])
         

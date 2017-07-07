@@ -43,16 +43,19 @@ class Clock:
                 action_before = action_before_info[:delay_pos].strip()
                 delay = int(action_before_info[delay_pos + 6:].strip())
 
-            
             # TODO: Delay
             if action_before in Clock.follower_map:
                 Clock.follower_map[action_before].append((engine, delay))
             else:
                 Clock.follower_map[action_before] = [(engine, delay)]
+        elif trigger == 'on idle':
+            pass
+
 
     @staticmethod
     def on_idle():
-        # print('On Idle')
+        """
+        """
         pass
 
     @staticmethod
