@@ -40,22 +40,19 @@ def load_config(filename) -> dict:
     return config
 
 
-def load_configs() -> list:
+def load_configs(work_path) -> list:
     """
     Read toml files into a list of config.
-    """    
-    config_path_base = "../conf/"
-    with open(config_path_base + "select.toml", "rb") as file:
+    """
+    # Load __import__.toml first
+    work_path = os.path.join("../conf/", work_path)
+    config_path = os.path.join(work_path, '__import__.toml')
+    with open(config_path, "rb") as file:
         main_config = toml.load(file)
-    
-    #
-    config_path = config_path_base + main_config['path']
-    if not os.path.exists(config_path):
-        return []
     
     # Load all the toml files
     config_map = dict()
-    for fs in os.walk(config_path):
+    for fs in os.walk(work_path):
         for file in fs[2]:
             # Ignore the unused toml files
 
@@ -118,5 +115,9 @@ def main(configs):
         e.start()
 
 if __name__ == '__main__':
-    configs = load_configs()
+    work_path = ""
+    if len(sys.argv) > 1:
+        work_path = sys.argv[1]
+    configs = load_configs(work_path)
+    # print(configs)
     main(configs)

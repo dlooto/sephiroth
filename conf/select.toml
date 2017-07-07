@@ -1,6 +1,0 @@
-
-
-comment="自动站"
-path = "shanghai"
-exclude = ["cinderella.in*", "cinderella.re*", "hpge"]
-

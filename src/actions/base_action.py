@@ -35,10 +35,11 @@ class BaseAction:
         print(self.__doc__)
 
     def __precheck(self, lines):
+        # TODO: 
         for line in lines:
             if line.startswith(':param'):
                 param = line[7:]
-                print(param)
+                ps = param.split('||')
 
 
     def precheck(self):
