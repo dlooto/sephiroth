@@ -25,7 +25,7 @@ class Clock:
             if trigger.startswith('every-month'):
                 time_format += ("\d\d-" + trigger[12:].strip())
             elif trigger.startswith('every-day'):
-                time_format += ("\d\d-\d\d" + trigger[10:].strip())
+                time_format += ("\d\d-\d\d " + trigger[10:].strip())
             elif trigger.startswith('every-hour'):
                 time_format += ("\d\d-\d\d \d\d:" + trigger[11:].strip())
             elif trigger.startswith('every-minute'):
@@ -69,7 +69,9 @@ class Clock:
         
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(current_second))
         match_count = 0
+        
         for (time_format, engine) in Clock.time_format_engine_list:
+            print(time_format, current_time)
             if time_format.match(current_time):
                 print('[%s]! %s' % (current_time, engine))
                 match_count += 1

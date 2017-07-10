@@ -1,4 +1,4 @@
 
 
 comment="自动站"
-exclude = ["cinderella.in*", "cinderella.re*", "hpge"]
+exclude = ["cinderella.hi*", "cinderella.re*", "hpge"]

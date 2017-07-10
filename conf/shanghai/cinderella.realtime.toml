@@ -27,7 +27,6 @@ exit_at = "len({@result_set}) == 0"
 logto = "me"
 loglevel = 1
 
-# Goto sub toml
 
 
 

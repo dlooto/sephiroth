@@ -18,7 +18,7 @@ class HttpGetAction(BaseAction):
         
         resp = requests.get(url)
         value = resp.text
-        
+        print(value)
         return_var = self.get_return_var_name()
                     
         if 'content_type' in action_config and action_config['content_type'] == 'json':
