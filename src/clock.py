@@ -71,7 +71,7 @@ class Clock:
         match_count = 0
         
         for (time_format, engine) in Clock.time_format_engine_list:
-            print(time_format, current_time)
+            # print(time_format, current_time)
             if time_format.match(current_time):
                 print('[%s]! %s' % (current_time, engine))
                 match_count += 1
