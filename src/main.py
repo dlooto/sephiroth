@@ -9,6 +9,8 @@ import threading
 import clock
 import resource
 import engine
+
+
 #
 def get_requires(config):
     """
@@ -40,11 +42,12 @@ def load_config(filename) -> dict:
     return config
 
 
-def load_configs(work_path) -> list:
+def load_configs(work_path):
     """
     Read toml files into a list of config.
     """
     # Load __import__.toml first
+    # If Not Unix absolute path, or Windows absolute path(c:/a/b)
     if not (work_path.startswith('/') or work_path[1] == ':'):
         work_path = os.path.join("../conf/", work_path)
     config_path = os.path.join(work_path, '__import__.toml')
@@ -116,6 +119,7 @@ def main(configs):
         # Start an engine with its config including main section only.
         e = engine.Engine(config)
         e.start()
+
 
 if __name__ == '__main__':
     work_path = ""

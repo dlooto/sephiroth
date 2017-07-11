@@ -62,21 +62,21 @@ class Context:
         for func_name in func_names:
             func_name = func_name.strip()
             if func_name == 'join':
-                funcs.append( lambda x: ",".join(x) )
+                funcs.append(lambda x: ",".join(x))
             elif func_name == 'stringify':
-                funcs.append( lambda x: [str(i) for i in x] )
+                funcs.append(lambda x: [str(i) for i in x])
             elif func_name == 'split':
-                funcs.append( lambda x: x.split(',') )
+                funcs.append(lambda x: x.split(','))
             elif func_name == 'first':
-                funcs.append( lambda x: x[0] )
+                funcs.append(lambda x: x[0])
             elif func_name == 'last':
-                funcs.append( lambda x: x[-1] )
+                funcs.append(lambda x: x[-1])
             elif func_name == 'shift':
-                funcs.append( lambda x: x[1:] )
+                funcs.append(lambda x: x[1:])
             elif func_name == 'pop':
-                funcs.append( lambda x: x[:-1] )
+                funcs.append(lambda x: x[:-1])
             elif func_name == 'reverse':
-                funcs.append( lambda x: x[::-1] )                
+                funcs.append(lambda x: x[::-1])
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs
@@ -125,18 +125,18 @@ class Context:
     def set_return_value(self, return_value):
         self.return_value = return_value
 
-    def eval_expr(self, expr):
+    def __eval_expr(self, expr):
         if '|' not in expr:
-            return self.eval_var(expr)
+            return self.__eval_var(expr)
         else:
             ps = expr.split('|')
-            v = self.eval_var(ps[0].strip())
+            v = self.__eval_var(ps[0].strip())
             funcs = Context.get_funcs(ps[1:])
             v = reduce(lambda x, y: y(x), funcs, v)
             
             return v
 
-    def eval_var(self, var):
+    def __eval_var(self, var):
         if var[0] == '@':
             if var[1] == '@':   # @@val for engine var
                 return self.get_engine_var(var[2:])
@@ -153,7 +153,7 @@ class Context:
         last_begin = 0
         a = []
         for val, begin, end in vals:
-            v = self.eval_expr(val)
+            v = self.__eval_expr(val)
             a.append(expr[last_begin: begin])
             a.append(str(v))
             last_begin = end + 1

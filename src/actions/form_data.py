@@ -24,7 +24,7 @@ class ResultSetToFormAction(BaseAction):
                     if len(attr) > 1:
                         convert = key_value_attributes_map[key][1]
                 # ["SomeKey", "", ""], if set the second empty string, 
-                # it would prevend transform this field in the destination dict
+                # it would prevent transform this field in the destination dict
                 if data_key == "":
                     continue
                 key = "data[%d][%s]" % (index, data_key)
@@ -51,10 +51,9 @@ class ResultSetToFormAction(BaseAction):
         param0 = self.get_param_var_name()
 
         data = context.get_context_var(param0)
-        print("ResultSet", data)
+        self.log(data)
         value = self.result_set_to_form_data(data, key_value_attributes_map)
-        
-        # print("FormData:", value)
+
         return_var = self.get_return_var_name()
 
         context.set_context_var(return_var, value)

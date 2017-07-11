@@ -79,7 +79,7 @@ class Logger:
         pass
 
     def __write_log_line(self, formatted_time, line):
-        #TODO: Log level
+        # TODO: Log level
         self.chars_count += self.file.write("[%s] %s\n" % (formatted_time, line))
         self.lines_count += 1
         if self.lines_count % 1 == 0:

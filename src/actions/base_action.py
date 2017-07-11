@@ -30,6 +30,7 @@ class BaseAction:
     """
     """
     def __init__(self):
+        self.context = None
         self.config = None
         self.engine_name = ""
         self.action_name = ""
@@ -90,9 +91,11 @@ class BaseAction:
 
     def log(self, line):
         if 'logto' not in self.action_config:
-            return # Log nothing if No logto field
+            return  # Log nothing if No logto field
         logto = self.action_config['logto']
-        
+
+        logto = self.context.evaluate(logto)
+
         logger = Resource.find_resource(self.engine_name, logto)
         if logger:
             logger.write(line)
@@ -100,6 +103,7 @@ class BaseAction:
             print(self.engine_name, logto)
 
     def try_execute(self, context):
+        self.context = context
         self.execute(context)
 
         action_config = self.get_action_config()
@@ -109,4 +113,6 @@ class BaseAction:
             # If the express returns True, 
             # throw Exception to finish the whole execution of the pipeline.
             if eval(expr):
-                raise Exception("exit at %s" % exit_at)        
+                raise Exception("exit at %s" % exit_at)
+
+        self.context = None
