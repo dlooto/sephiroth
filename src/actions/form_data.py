@@ -1,6 +1,7 @@
 
 from .base_action import *
 
+
 @Actions.register("resultset_to_form")
 class ResultSetToFormAction(BaseAction):
     """

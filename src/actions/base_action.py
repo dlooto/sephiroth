@@ -1,6 +1,7 @@
 
 from resource import *
 
+
 class Actions:
     """
     Hold the registered class object
@@ -29,7 +30,10 @@ class BaseAction:
     """
     """
     def __init__(self):
-        pass
+        self.config = None
+        self.engine_name = ""
+        self.action_name = ""
+        self.action_config = None
 
     def print_doc(self):
         print(self.__doc__)
@@ -41,7 +45,6 @@ class BaseAction:
                 param = line[7:]
                 ps = param.split('||')
 
-
     def precheck(self):
         doc = self.__doc__
         if not doc:
@@ -49,25 +52,28 @@ class BaseAction:
         lines = list(filter(lambda x: len(x) > 0, map(lambda x: x.strip(), doc.split('\n'))))
         return self.__precheck(lines)
 
+    #def set_global_resources(self, global_resources):
+    #    self.global_resources = global_resources
 
-    def set_global_resources(self, global_resources):
-        self.global_resources = global_resources
-
+    #
     def get_param_var_name(self, index=0):
         p = 'param%d' % index
         if p in self.action_config:
             return self.action_config[p]
         return None
 
+    #
     def get_return_var_name(self):
         return_var_name = '_r'
         if 'return' in self.action_config:
             return_var_name = self.action_config['return']
         return return_var_name
 
+    #
     def get_name(self, action_name):
         return self.action_name
 
+    #
     def set_info(self, engine_name, action_name, config):
         """
         This function should be invoked in advanced.

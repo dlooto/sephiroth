@@ -1,7 +1,8 @@
 
-import json
+import os
 import time
 from functools import reduce
+
 
 def get_val_str(line, begin=0):
     """
@@ -37,10 +38,13 @@ def get_val_str_list(line):
         begin = pos + offset
     return results
 
+
 class Context:
 
     def __init__(self):
         self.vars = dict()
+        self.engine = None
+        self.return_value = None
         self.last_return_value = None
 
     # All context share one current_time in seconds

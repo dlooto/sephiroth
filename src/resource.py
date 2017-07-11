@@ -3,6 +3,7 @@ import MySQLdb
 import MySQLdb.cursors
 import MySQLdb.converters
 
+
 class Resource:
     #
     resource_map = dict()
@@ -84,7 +85,6 @@ class Resource:
             return Resource.find_global_resource(resource_name)
         else:
             return Resource.find_local_resource(scope, resource_name)
-
 
     @staticmethod
     def find_global_resource(resource_name):

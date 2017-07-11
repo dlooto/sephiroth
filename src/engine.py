@@ -1,20 +1,20 @@
 
-from threading import Timer, Thread
-import time
-from context import *
-from clock import *
-from actions import *
-from resource import *
 import threading
 import traceback
 
+from resource import Resource
+from clock import Clock
+from context import *
+from actions import *
+
+
 # EngineState_Init -> EngineState_Start -> EngineState_Running -> EngineState_Waiting
 # -> EngineState_Running
-EngineState_Unknown     = 0
-EngineState_Init        = 1
-EngineState_Start       = 2
-EngineState_Running     = 3
-EngineState_Waiting     = 4
+EngineState_Unknown = 0
+EngineState_Init = 1
+EngineState_Start = 2
+EngineState_Running = 3
+EngineState_Waiting = 4
 
 
 class Engine:
@@ -24,6 +24,7 @@ class Engine:
     
     def __init__(self, config):
         self.config = config
+        self.exec_times = 0
         self.name = self.config['main']['name']
         self.__state = EngineState_Init
         self.engine_instance_vars = dict()
@@ -63,13 +64,11 @@ class Engine:
         for key, value in vars.items():
             self.engine_instance_vars[key] = value
 
-
     def start(self):
         """
         """
         if 'vars' in self.config:
             self.initialize_vars(self.config['vars'])
-
 
         # TODO: Register Engine in clock.tick for very 30 s
         triggers = self.config['main']['triggers']
@@ -80,8 +79,6 @@ class Engine:
         for trigger in triggers:
             Clock.register(self, trigger)
 
-
-
     def __run(self, context):
         """
         """
@@ -89,7 +86,7 @@ class Engine:
             return
         actions_config = self.config['action']
         if 'main' not in actions_config:
-            print("Counld NOT find main action!")
+            print("Could NOT find main action!")
         else:
             print('Engine', self.config['main']['name'])
 
@@ -144,8 +141,8 @@ class Engine:
         if action.precheck():
             pass
         action.try_execute(context)
+        self.exec_times += 1
 
-    
     def get_value(self, key, default_value=None):
         """
         Get engine instance variable value
@@ -158,5 +155,3 @@ class Engine:
     def set_value(self, key, value):
         self.engine_instance_vars[key] = value
 
-        
-        

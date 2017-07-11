@@ -1,7 +1,7 @@
 
 from .base_action import *
 from resource import *
-import MySQLdb.cursors
+
 
 @Actions.register("mysql_select")
 class MySQLSelectAction(BaseAction):
@@ -9,7 +9,6 @@ class MySQLSelectAction(BaseAction):
     :param sql || string
     :param mysqlconnection || string
     """
-
 
     def execute(self, context):
         result = None

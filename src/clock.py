@@ -1,9 +1,10 @@
 
-import threading
+
 from threading import Timer
-from context import *
 import time
 import re
+import context
+
 
 class Clock:
 
@@ -51,7 +52,6 @@ class Clock:
         elif trigger == 'on idle':
             pass
 
-
     @staticmethod
     def on_idle():
         """
@@ -64,7 +64,7 @@ class Clock:
         if Clock.last_emit_second == current_second:
             return
         # 更新每秒的时间
-        Context.set_time(current_second)
+        context.Context.set_time(current_second)
         Clock.last_emit_second = current_second
         
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(current_second))
@@ -77,7 +77,6 @@ class Clock:
                 match_count += 1
                 engine.run()
 
-        
         if match_count == 0:
             Clock.on_idle()
 
@@ -95,7 +94,6 @@ class Clock:
                 follower.run(context)
             else:
                 Timer(delay, run_func, (follower, context)).start()
-        
 
     @staticmethod
     def tick():

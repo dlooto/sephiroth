@@ -2,6 +2,7 @@
 from .base_action import *
 import os
 
+
 @Actions.register("find_files")
 class FindFilesAction(BaseAction):
     """
@@ -12,10 +13,7 @@ class FindFilesAction(BaseAction):
         return_var = self.get_return_var_name()
         context.set_context_var(return_var, filename) 
 
-
     def execute(self, context):
-        action_config = self.get_action_config()
-        
         param0 = self.get_param_var_name()
         param0 = context.evaluate(param0)
         for fs in os.walk(param0):

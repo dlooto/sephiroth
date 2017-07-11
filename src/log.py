@@ -3,10 +3,11 @@ import time
 import os
 import re
 
-LoggerSwitch_None       = 0
-LoggerSwitch_Daily      = 1
-LoggerSwitch_Monthly    = 2
-LoggerSwitch_Restart    = 4
+LoggerSwitch_None = 0
+LoggerSwitch_Daily = 1
+LoggerSwitch_Monthly = 2
+LoggerSwitch_Restart = 4
+
 
 class Logger:
     """
@@ -24,12 +25,11 @@ class Logger:
         self.switch_file()
         return True
 
-
     def __init__(self, config):
         self.filename = None # Current file name
         self.file = None
         self.config = config
-
+        self.open_time = None
         self.last_log_time = None
         self.chars_count = 0
         self.lines_count = 0
@@ -77,7 +77,6 @@ class Logger:
 
     def try_switch_file(self):
         pass
-        
 
     def __write_log_line(self, formatted_time, line):
         #TODO: Log level
@@ -107,8 +106,7 @@ class Logger:
                 self.check_for_daily()
             elif self.switch_policy & LoggerSwitch_Monthly:
                 self.check_for_monthly()
-        
-        
+
         self.__write_log_line(formatted_time, line)
 
         self.last_log_time = current_time
@@ -120,4 +118,3 @@ if __name__ == '__main__':
     config = {'filename': 'a1-{$date}-#.log', 'path': "/Users/healer/{$month}"}
     logger = Logger(config)
     logger.write("test line")
-    

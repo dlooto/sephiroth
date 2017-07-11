@@ -1,16 +1,15 @@
 
-import time
 import os
 import sys
+import re
 import pytoml as toml
 import signal
 import threading
-from engine import *
-from resource import *
 
-from actions import *
-
-
+import clock
+import resource
+import engine
+#
 def get_requires(config):
     """
     Get require sub toml files list
@@ -18,6 +17,7 @@ def get_requires(config):
     if 'main' in config and 'require' in config['main']:
         return config['main']['require']
     return []
+
 
 def merge_config(config, required_config):
     """
@@ -45,7 +45,8 @@ def load_configs(work_path) -> list:
     Read toml files into a list of config.
     """
     # Load __import__.toml first
-    work_path = os.path.join("../conf/", work_path)
+    if not (work_path.startswith('/') or work_path[1] == ':'):
+        work_path = os.path.join("../conf/", work_path)
     config_path = os.path.join(work_path, '__import__.toml')
     with open(config_path, "rb") as file:
         main_config = toml.load(file)
@@ -79,8 +80,10 @@ def load_configs(work_path) -> list:
 
     return config_map.values()
 
+
 def flush_all_logs():
     pass
+
 
 def exit_handler(signum, frame):
     """
@@ -95,23 +98,23 @@ def main(configs):
     """
     print("Main-ThreadId:", threading.get_ident())
     signal.signal(signal.SIGINT, exit_handler)
-    Clock.tick()
+    clock.Clock.tick()
     
     for config in configs:
         if config['__filename__'] == 'global.toml':
-            Resource.initialize_global_resources(config)
+            resource.Resource.initialize_global_resources(config)
 
     for config in configs:
         # Ignore the global resource file
         if config['__filename__'] == 'global.toml':
             continue
         
-        # required toml would NOT have main section
+        # required .toml would NOT have main section
         if 'main' not in config:
             continue
         
         # Start an engine with its config including main section only.
-        e = Engine(config)
+        e = engine.Engine(config)
         e.start()
 
 if __name__ == '__main__':
@@ -119,5 +122,4 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         work_path = sys.argv[1]
     configs = load_configs(work_path)
-    # print(configs)
     main(configs)
