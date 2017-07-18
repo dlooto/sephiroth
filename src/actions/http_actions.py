@@ -41,6 +41,7 @@ class HttpPostAction(BaseAction):
         
         post_url = context.evaluate(action_config['url'])
         resp = requests.post(post_url, data=data)
+        resp.connection.close()
         self.log(resp.text)
 
 

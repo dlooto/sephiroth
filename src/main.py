@@ -48,6 +48,7 @@ def load_configs(work_path):
     """
     # Load __import__.toml first
     # If Not Unix absolute path, or Windows absolute path(c:/a/b)
+    
     if not (work_path.startswith('/') or work_path[1] == ':'):
         work_path = os.path.join("../conf/", work_path)
     config_path = os.path.join(work_path, '__import__.toml')

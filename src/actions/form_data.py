@@ -53,7 +53,7 @@ class ResultSetToFormAction(BaseAction):
         data = context.get_context_var(param0)
         self.log(data)
         value = self.result_set_to_form_data(data, key_value_attributes_map)
-
+        self.log(value)
         return_var = self.get_return_var_name()
 
         context.set_context_var(return_var, value)
