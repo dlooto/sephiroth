@@ -69,12 +69,13 @@ class Clock:
         
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(current_second))
         match_count = 0
-        
+
         for (time_format, engine) in Clock.time_format_engine_list:
             # print(time_format, current_time)
             if time_format.match(current_time):
                 print('[%s]! %s' % (current_time, engine))
                 match_count += 1
+                engine.set_trigger_time(current_second)
                 engine.run()
 
         if match_count == 0:
