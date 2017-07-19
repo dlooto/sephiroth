@@ -25,6 +25,7 @@ class Engine:
     def __init__(self, config):
         self.config = config
         self.exec_times = 0
+        self.trigger_time = 0
         self.name = self.config['main']['name']
         self.__state = EngineState_Init
         self.engine_instance_vars = dict()
@@ -56,6 +57,9 @@ class Engine:
         finally:
             self.__state = EngineState_Waiting
             # Keep the context for the follower engines
+
+    def set_trigger_time(self, trigger_time):
+        self.trigger_time = trigger_time
 
     # !
     def initialize_vars(self, vars):
@@ -147,6 +151,9 @@ class Engine:
         """
         Get engine instance variable value
         """
+        if key == 'trigger_time':
+            return self.trigger_time
+
         if key in self.engine_instance_vars:
             return self.engine_instance_vars[key]
         else:
