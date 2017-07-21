@@ -137,6 +137,7 @@ class Context:
             return v
 
     def __eval_var(self, var):
+        
         if var[0] == '@':
             if var[1] == '@':   # @@val for engine var
                 return self.get_engine_var(var[2:])

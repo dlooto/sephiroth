@@ -54,7 +54,7 @@ class HttpPostFileAction(BaseAction):
         
         param0 = self.get_param_var_name()
 
-        filename = context.evaluate(context.get_context_var(param0))
+        filename = context.evaluate(param0)
         with open(filename, 'rb') as file:
             post_url = context.evaluate(action_config['url'])
             resp = requests.post(post_url, files={'file': file})

@@ -23,6 +23,8 @@ class ResultSetToFormAction(BaseAction):
                     data_key = attr[0]
                     if len(attr) > 1:
                         convert = key_value_attributes_map[key][1]
+                else:
+                    continue
                 # ["SomeKey", "", ""], if set the second empty string, 
                 # it would prevent transform this field in the destination dict
                 if data_key == "":
@@ -53,7 +55,7 @@ class ResultSetToFormAction(BaseAction):
         data = context.get_context_var(param0)
         self.log(data)
         value = self.result_set_to_form_data(data, key_value_attributes_map)
-
+        print(value)
         return_var = self.get_return_var_name()
 
         context.set_context_var(return_var, value)
