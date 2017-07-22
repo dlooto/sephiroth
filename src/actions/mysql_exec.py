@@ -3,8 +3,8 @@ from .base_action import *
 from resource import *
 
 
-@Actions.register("mysql_select")
-class MySQLSelectAction(BaseAction):
+@Actions.register("mysql_exec")
+class MySQLExecAction(BaseAction):
     """
     :param sql || string
     :param mysqlconnection || string
