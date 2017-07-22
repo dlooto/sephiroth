@@ -38,6 +38,13 @@ def get_val_str_list(line):
         begin = pos + offset
     return results
 
+class BuildinFunc:
+    @staticmethod
+    def filename(path):
+        import os
+        return os.path.basename(path)
+
+
 
 class Context:
 
@@ -77,6 +84,8 @@ class Context:
                 funcs.append(lambda x: x[:-1])
             elif func_name == 'reverse':
                 funcs.append(lambda x: x[::-1])
+            elif func_name == 'filename':
+                funcs.append(BuildinFunc.filename)
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs
