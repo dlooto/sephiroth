@@ -44,7 +44,11 @@ class BuildinFunc:
         import os
         return os.path.basename(path)
 
-
+    @staticmethod
+    def unixtime(formatted_time):
+        import time
+        st = time.strptime(formatted_time, '%Y-%m-%d %H:%M:%S')
+        return int(time.mktime(st))
 
 class Context:
 
@@ -86,6 +90,8 @@ class Context:
                 funcs.append(lambda x: x[::-1])
             elif func_name == 'filename':
                 funcs.append(BuildinFunc.filename)
+            elif func_name == 'unixtime':
+                funcs.append(BuildinFunc.unixtime)                
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs

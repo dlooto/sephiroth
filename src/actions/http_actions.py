@@ -59,5 +59,9 @@ class HttpPostFileAction(BaseAction):
         with open(filename, 'rb') as file:
             post_url = context.evaluate(action_config['url'])
             resp = requests.post(post_url, files={'file': file})
+            value = resp.text
+            if 'content_type' in action_config and action_config['content_type'] == 'json':
+                value = json.loads(value)
             print(resp.text)
-            self.log(resp.text)
+            return_var = self.get_return_var_name()
+            context.set_context_var(return_var, value)
