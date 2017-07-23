@@ -128,6 +128,8 @@ class Context:
         ps = var.split('.')
         v = self.vars
         for p in ps:
+            if p.startswith('@') or p.startswith('$'):
+                p = "%s" % self.__eval_var(p)
             if not p.isdigit():
                 v = v[p]
             else:

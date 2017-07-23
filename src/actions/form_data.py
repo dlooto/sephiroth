@@ -14,6 +14,7 @@ class ResultSetToFormAction(BaseAction):
     def result_set_to_form_data2(self, dict_list, key_value_attributes, context):
         result = dict()
         index = 0
+        context.set_context_var('i', index)
         for d in dict_list:
             for item in key_value_attributes:
                 (key, value) = item
@@ -21,6 +22,7 @@ class ResultSetToFormAction(BaseAction):
                 result[form_key] = context.evaluate(value)
 
             index += 1
+            context.set_context_var('i', index)
         return result
 
 
