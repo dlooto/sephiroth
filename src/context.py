@@ -38,6 +38,17 @@ def get_val_str_list(line):
         begin = pos + offset
     return results
 
+class BuildinFunc:
+    @staticmethod
+    def filename(path):
+        import os
+        return os.path.basename(path)
+
+    @staticmethod
+    def unixtime(formatted_time):
+        import time
+        st = time.strptime(formatted_time, '%Y-%m-%d %H:%M:%S')
+        return int(time.mktime(st))
 
 class Context:
 
@@ -77,6 +88,10 @@ class Context:
                 funcs.append(lambda x: x[:-1])
             elif func_name == 'reverse':
                 funcs.append(lambda x: x[::-1])
+            elif func_name == 'filename':
+                funcs.append(BuildinFunc.filename)
+            elif func_name == 'unixtime':
+                funcs.append(BuildinFunc.unixtime)                
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs
@@ -137,6 +152,7 @@ class Context:
             return v
 
     def __eval_var(self, var):
+        
         if var[0] == '@':
             if var[1] == '@':   # @@val for engine var
                 return self.get_engine_var(var[2:])

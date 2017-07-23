@@ -41,7 +41,15 @@ class HttpPostAction(BaseAction):
         
         post_url = context.evaluate(action_config['url'])
         resp = requests.post(post_url, data=data)
+        value = resp.text
+        print(value)
+        if 'content_type' in action_config and action_config['content_type'] == 'json':
+            value = json.loads(value)
+        
+        return_var = self.get_return_var_name()
+        context.set_context_var(return_var, value)
         resp.connection.close()
+        
         self.log(resp.text)
 
 
@@ -55,9 +63,15 @@ class HttpPostFileAction(BaseAction):
         
         param0 = self.get_param_var_name()
 
-        filename = context.evaluate(context.get_context_var(param0))
+        filename = context.evaluate(param0)
+        print(filename)
         with open(filename, 'rb') as file:
             post_url = context.evaluate(action_config['url'])
             resp = requests.post(post_url, files={'file': file})
+            value = resp.text
+            print(value)
+            if 'content_type' in action_config and action_config['content_type'] == 'json':
+                value = json.loads(value)
             print(resp.text)
-            self.log(resp.text)
+            return_var = self.get_return_var_name()
+            context.set_context_var(return_var, value)

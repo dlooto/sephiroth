@@ -3,8 +3,8 @@ from .base_action import *
 from resource import *
 
 
-@Actions.register("mysql_select")
-class MySQLSelectAction(BaseAction):
+@Actions.register("mysql_exec")
+class MySQLExecAction(BaseAction):
     """
     :param sql || string
     :param mysqlconnection || string
@@ -17,9 +17,11 @@ class MySQLSelectAction(BaseAction):
             action_config = self.get_action_config()
             sql = context.evaluate(action_config['sql'])
             # Logger
+            
             self.log(sql)
             cursor.execute(sql)
             result = cursor.fetchall()
+            print(result)
             
             return_var = self.get_return_var_name()
             context.set_context_var(return_var, result)
