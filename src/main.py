@@ -42,35 +42,40 @@ def load_config(filename) -> dict:
     return config
 
 
-def load_configs(work_path):
+def load_configs(config_path):
     """
     Read toml files into a list of config.
     """
     # Load __import__.toml first
     # If Not Unix absolute path, or Windows absolute path(c:/a/b)
     
-    if not (work_path.startswith('/') or work_path[1] == ':'):
-        work_path = os.path.join("../conf/", work_path)
-    config_path = os.path.join(work_path, '__import__.toml')
+    if not (config_path.startswith('/') or config_path[1] == ':'):
+        config_path = os.path.join("../conf/", config_path)
+    
+    if not config_path.endswith('.toml'):
+        config_path = os.path.join(config_path, '__import__.toml')
+
     with open(config_path, "rb") as file:
         main_config = toml.load(file)
+
     
     # Load all the toml files
     config_map = dict()
+    work_path = os.path.dirname(config_path)
+    
     for fs in os.walk(work_path):
         for file in fs[2]:
             # Ignore the unused toml files
-
-            skip = False
-            if 'exclude' in main_config:
-                for exclude in main_config['exclude']:
-                    if re.match(exclude, file):
-                        skip = True
-                        break
-
+            if 'import' not in main_config:
+                break
+            skip = True
+            for imports in main_config['import']:
+                if imports == file:
+                    skip = False
+                    break
             if file.startswith('!') or skip:
                 continue
-
+            
             config = load_config(os.path.join(fs[0], file))
             config['__filename__'] = file
             config_map[file] = config
@@ -125,6 +130,7 @@ def main(configs):
 if __name__ == '__main__':
     work_path = ""
     if len(sys.argv) > 1:
-        work_path = sys.argv[1]
-    configs = load_configs(work_path)
-    main(configs)
+        config_path = sys.argv[1]
+    configs = load_configs(config_path)
+    if len(configs) > 0:
+        main(configs)

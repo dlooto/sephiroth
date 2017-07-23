@@ -132,7 +132,7 @@ class Engine:
                 break
             next_action = action_config['next']
             if next_action not in actions_config:
-                raise Exception("No action provided")
+                raise Exception("No action provided " + next_action)
             
             action_name = next_action
             action_config = actions_config[action_name]
