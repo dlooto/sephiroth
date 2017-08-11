@@ -74,6 +74,15 @@ class Engine:
         if 'vars' in self.config:
             self.initialize_vars(self.config['vars'])
 
+        # For load extra system's action classes.
+        if 'import' in self.config['main']:
+            import sys
+            action_path = os.path.join(self.config['__path__'], self.config['main']['import'][1])
+            sys.path.append(action_path)
+            __import__(self.config['main']['import'][0])
+            
+            #from actions2 import dump_pickle
+
         # TODO: Register Engine in clock.tick for very 30 s
         triggers = self.config['main']['triggers']
         if isinstance(triggers, str):

@@ -77,6 +77,7 @@ def load_configs(config_path):
                 continue
             
             config = load_config(os.path.join(fs[0], file))
+            config['__path__'] = fs[0]
             config['__filename__'] = file
             config_map[file] = config
     
