@@ -25,12 +25,18 @@ def merge_config(config, required_config):
     """
     """
     for key, value in required_config.items():
-        if key == '__filename__':
+        if key == '__filename__' or key == '__path__':
             continue
         if key not in config:
-            config[key] = value
+            config[key] = [value]
         else:
-            config[key].update(value)
+            try:
+                if value == config[key]:
+                    continue
+                config[key].update(value)
+            except:
+                print('Exception', key, value)
+                exit()
 
 
 def load_config(filename) -> dict:
@@ -86,6 +92,8 @@ def load_configs(config_path):
         requires = get_requires(config)
         if len(requires) > 0:
             for require in requires:
+                #print(config)
+                #print(config_map[require])
                 merge_config(config, config_map[require])
 
     return config_map.values()
