@@ -16,12 +16,19 @@ class Logger:
     if filename contains {$pid}, means switch log file when restart, NOT appending
     
     """
+    def check_path_exist(self):
+        filename = self.make_filename()
+        path = os.path.dirname(filename)
+        if not os.path.exists(path):
+            os.mkdir(path)
 
     def check_for_daily(self):
+        self.check_path_exist()
         self.switch_file()
         return True
 
     def check_for_monthly(self):
+        self.check_path_exist()
         self.switch_file()
         return True
 
