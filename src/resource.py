@@ -8,6 +8,8 @@ class Resource:
     #
     resource_map = dict()
 
+    connect = None
+
     #
     global_variables = dict()
 
@@ -51,10 +53,12 @@ class Resource:
 
         conv = MySQLdb.converters.conversions.copy()
         conv[12] = str
-        db = MySQLdb.connect(**config, cursorclass=MySQLdb.cursors.DictCursor, conv=conv)
+        Resource.connect = lambda: MySQLdb.connect(**config, cursorclass=MySQLdb.cursors.DictCursor, conv=conv)
+        db = Resource.connect()
 
         resource_full_name = "%s.%s" % (scope, resource_name)
         Resource.resource_map[resource_full_name] = db
+        
 
     @staticmethod
     def initialize_logger(scope, config):
@@ -85,6 +89,11 @@ class Resource:
             return Resource.find_global_resource(resource_name)
         else:
             return Resource.find_local_resource(scope, resource_name)
+
+    @staticmethod
+    def reset_mysql_global_connection(resource_name, conn):
+        resource_full_name = "%s.%s" % ('global', resource_name)
+        Resource.resource_map[resource_full_name] = conn
 
     @staticmethod
     def find_global_resource(resource_name):
