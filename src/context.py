@@ -52,7 +52,7 @@ class BuildinFunc:
 
     @staticmethod
     def from_bit(bit):
-        if bit == b'\\x0' || bit == b'\\x00':
+        if bit == b'\x00':
             return 0
         return 1
 
