@@ -50,6 +50,12 @@ class BuildinFunc:
         st = time.strptime(formatted_time, '%Y-%m-%d %H:%M:%S')
         return int(time.mktime(st))
 
+    @staticmethod
+    def from_bit(bit):
+        if bit == b'\\x0'
+            return 0
+        return 1
+
 class Context:
 
     def __init__(self):
