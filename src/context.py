@@ -50,6 +50,12 @@ class BuildinFunc:
         st = time.strptime(formatted_time, '%Y-%m-%d %H:%M:%S')
         return int(time.mktime(st))
 
+    @staticmethod
+    def from_bit(bit):
+        if bit == b'\\x0' || bit == b'\\x00':
+            return 0
+        return 1
+
 class Context:
 
     def __init__(self):
@@ -92,6 +98,8 @@ class Context:
                 funcs.append(BuildinFunc.filename)
             elif func_name == 'unixtime':
                 funcs.append(BuildinFunc.unixtime)                
+            elif func_name == 'from_bit':
+                funcs.append(BuildinFunc.from_bit)                
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs
