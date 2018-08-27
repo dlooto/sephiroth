@@ -53,12 +53,17 @@ class Config:
 
             with open(toml_file_path, 'rb') as file:
                 # tomls hold all the configs parsed from toml file.
-                toml_config = toml.load(file)
+                try:
+                    toml_config = toml.load(file)
+                except toml.TomlError as e:
+                    print(e, "Something goes wrong?")
+                    exit(0)
+                    
                 self.toml_files.append(toml_file_path)
                 self.tomls[toml_file_path] = toml_config
                 print(toml_config)
-                if Requires in toml_config:
-                    toml_files = toml_config[Requires]
+                if Kw_Requires in toml_config:
+                    toml_files = toml_config[Kw_Requires]
                     self.__parse_toml_files(toml_files)
 
     def __load_toml_files(self):
@@ -84,15 +89,41 @@ class Config:
             else:
                 d1[key].update(value)
 
-    def get_value(self, key):
+    def get_actions(self):
+        actions_map = self.get_value('action')
+        action_name = self.get_value('main.action')
+        actions = []
+        actions_set = set()
+        while action_name:
+            if action_name in actions_set:
+                # loop actions NOT support now.
+                break
+            actions.append(action_name)
+            # if found action loop? TODO:
+            actions_set.add(action_name)
+            action_name = self.get_value('action.%s.next' % action_name)
+            # print(action_name)
+        return actions
+
+
+    def get_value(self, key, default_val=None):
+        if "." not in key:
+            # Optimize
+            if key in self.toml_config:
+                return self.toml_config[key]
+            else:
+                return default_val
         key_parts = key.split(".")
-        return Config.__get_value(self.toml_config, key_parts)
+        return Config.__get_value(self.toml_config, key_parts, default_val)
 
     @staticmethod
-    def __get_value(config_dict, key_parts):
+    def __get_value(config_dict, key_parts, default_val):
         config = config_dict
         for key_part in key_parts:
-            config = config[key_part]
+            if key_part in config:
+                config = config[key_part]
+            else:
+                return default_val
         return config
 
 

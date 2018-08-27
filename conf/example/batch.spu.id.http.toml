@@ -1,9 +1,12 @@
 
 
-[action.a]
-value = 1
+[action.requestBatchProductInfo]
+type = "http.get"
+url = "d"
+next = "b"
 
 
 [action.b]
 value = 1
+next = "c"
 

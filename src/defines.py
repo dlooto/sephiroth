@@ -14,4 +14,12 @@ ConfigState_Parsed     = 1
 ConfigState_Loaded     = 2
 
 
-Requires = "requires"
+Kw_Requires             = "requires"
+Kw_Main                 = "main"
+Kw_Action               = "action"
+Kw_Resource             = "resource"
+
+#全部关键字列表
+Keywords = [Kw_Action, Kw_Main, Kw_Requires, Kw_Resource]
+
+Logger_Format = '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'

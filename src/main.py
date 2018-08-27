@@ -14,6 +14,7 @@ import threading
 import clock
 import resource
 import engine
+from logger import *
 
 
 #
@@ -130,9 +131,14 @@ def main(configs):
         e = engine.Engine(config)
         e.start()
 
-def main2(toml, port):
+logger = Logger("a.log").get_logger()
 
-    print("start@thread(%s)" % threading.get_ident())
+logger.info("hello")
+
+
+def main2(toml, port):
+    
+    logger.info("start@thread(%s)" % threading.get_ident())
     signal.signal(signal.SIGINT, exit_handler)
 
     from config import Config
@@ -142,6 +148,9 @@ def main2(toml, port):
     # 靠谱
     # v = config.get_value("action.c.value")
     # print(v)
+    logger.info(config.get_actions())
+
+
 
 
 if __name__ == '__main__':
