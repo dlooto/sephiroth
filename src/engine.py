@@ -6,15 +6,7 @@ from resource import Resource
 from clock import Clock
 from context import *
 from actions import *
-
-
-# EngineState_Init -> EngineState_Start -> EngineState_Running -> EngineState_Waiting
-# -> EngineState_Running
-EngineState_Unknown = 0
-EngineState_Init = 1
-EngineState_Start = 2
-EngineState_Running = 3
-EngineState_Waiting = 4
+from defines import *
 
 
 class Engine:
@@ -23,6 +15,9 @@ class Engine:
     """
     
     def __init__(self, config):
+        """
+        param: 
+        """
         self.config = config
         self.exec_times = 0
         self.trigger_time = 0

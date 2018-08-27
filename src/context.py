@@ -57,6 +57,8 @@ class BuildinFunc:
         return 1
 
 class Context:
+    """
+    """
 
     def __init__(self):
         self.vars = dict()

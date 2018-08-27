@@ -2,7 +2,12 @@
 import os
 import sys
 import re
-import pytoml as toml
+
+try:
+    import pytoml as toml
+except:
+    print("Please `pip install pytoml`")
+    exit()
 import signal
 import threading
 
@@ -98,7 +103,6 @@ def exit_handler(signum, frame):
     """
     Quit all the threads when Ctrl+C
     """
-    flush_all_logs()
     sys.exit()
 
 
@@ -126,11 +130,45 @@ def main(configs):
         e = engine.Engine(config)
         e.start()
 
+def main2(toml, port):
+
+    print("start@thread(%s)" % threading.get_ident())
+    signal.signal(signal.SIGINT, exit_handler)
+
+    from config import Config
+    config = Config(toml)
+    config.load()
+
+    # 靠谱
+    # v = config.get_value("action.c.value")
+    # print(v)
+
 
 if __name__ == '__main__':
+    from help import usage
     work_path = ""
-    if len(sys.argv) > 1:
-        config_path = sys.argv[1]
-    configs = load_configs(config_path)
-    if len(configs) > 0:
-        main(configs)
+    if len(sys.argv) == 1:
+        print(usage.__doc__)
+        exit(0)
+
+    from optparse import OptionParser    
+    parser = OptionParser()
+
+    parser.add_option("-t", "--toml", action="store", dest="toml", help="Provide the main toml file")
+    parser.add_option("-p", "--port", action="store", dest="port", help="Provide admin server port")
+    options, args = parser.parse_args()
+
+    if not options.toml:
+        print("Please provide the main toml file.")
+        print(usage.__doc__)
+        exit(0)
+
+    #configs = load_configs(options.toml)
+    #if len(configs) > 0:
+    #    main(configs)
+
+    main2(options.toml, options.port)
+
+    from server import AdminServer
+    server = AdminServer()
+    server.start()
