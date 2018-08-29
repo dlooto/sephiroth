@@ -58,7 +58,7 @@ class Config:
                 except toml.TomlError as e:
                     print(e, "Something goes wrong?")
                     exit(0)
-                    
+
                 self.toml_files.append(toml_file_path)
                 self.tomls[toml_file_path] = toml_config
                 print(toml_config)
@@ -89,21 +89,36 @@ class Config:
             else:
                 d1[key].update(value)
 
-    def get_actions(self):
+    def get_pipelines(self):
         actions_map = self.get_value('action')
-        action_name = self.get_value('main.action')
-        actions = []
-        actions_set = set()
-        while action_name:
-            if action_name in actions_set:
-                # loop actions NOT support now.
-                break
-            actions.append(action_name)
-            # if found action loop? TODO:
-            actions_set.add(action_name)
-            action_name = self.get_value('action.%s.next' % action_name)
-            # print(action_name)
-        return actions
+        
+        start_action_names = []
+        for action_name, action in actions_map.items():
+            if Kw_Start_At in action:
+                start_action_names.append(action_name)
+        
+        if len(start_action_names) == 0:
+            print("No start action")
+            exit(0)
+
+        pipelines = dict()
+        
+        for action_name in start_action_names:
+            # in a pipeline, an action exists once only.
+            start_action_name = action_name
+            actions_set = set()
+            pipeline = []
+            while action_name:
+                if action_name in actions_set:
+                    # loop actions NOT support now.
+                    break
+                pipeline.append(actions_map[action_name])
+                # if found action loop? TODO:
+                print("##", action_name)
+                actions_set.add(action_name)
+                action_name = self.get_value('action.%s.next' % action_name)
+            pipelines[start_action_name] = pipeline
+        return pipelines
 
 
     def get_value(self, key, default_val=None):

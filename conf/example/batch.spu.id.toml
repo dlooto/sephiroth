@@ -6,9 +6,6 @@ requires = ["batch.spu.id.http.toml"]
 
 
 
-[main]
-action = "requestBatchProductInfo"
 
 [action.c]
 value = [1, 2]
-next = "requestBatchProductInfo"

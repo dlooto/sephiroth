@@ -4,9 +4,16 @@
 type = "http.get"
 url = "d"
 next = "b"
-
+start_at = ""
 
 [action.b]
 value = 1
 next = "c"
+
+
+[action.requestBatchSkuInfo]
+type = "http.get"
+url = "d"
+next = "c"
+start_at = ""
 

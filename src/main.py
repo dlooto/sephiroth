@@ -16,6 +16,9 @@ import resource
 import engine
 from logger import *
 
+logger = Logger("a.log").get_logger()
+
+logger.info("start sephiroth")
 
 #
 def get_requires(config):
@@ -96,14 +99,11 @@ def load_configs(config_path):
     return config_map.values()
 
 
-def flush_all_logs():
-    pass
-
-
 def exit_handler(signum, frame):
     """
     Quit all the threads when Ctrl+C
     """
+    logger.info("exit.<Ctrl+C>")
     sys.exit()
 
 
@@ -131,10 +131,6 @@ def main(configs):
         e = engine.Engine(config)
         e.start()
 
-logger = Logger("a.log").get_logger()
-
-logger.info("hello")
-
 
 def main2(toml, port):
     
@@ -148,9 +144,11 @@ def main2(toml, port):
     # 靠谱
     # v = config.get_value("action.c.value")
     # print(v)
-    logger.info(config.get_actions())
+    logger.info(config.get_pipelines())
 
-
+    from server import AdminServer
+    server = AdminServer()
+    server.start()
 
 
 if __name__ == '__main__':
@@ -178,6 +176,3 @@ if __name__ == '__main__':
 
     main2(options.toml, options.port)
 
-    from server import AdminServer
-    server = AdminServer()
-    server.start()
