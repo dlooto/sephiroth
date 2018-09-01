@@ -16,6 +16,7 @@ import resource
 import engine
 from logger import *
 
+
 logger = Logger("a.log").get_logger()
 
 logger.info("start sephiroth")
@@ -132,7 +133,7 @@ def main(configs):
         e.start()
 
 
-def main2(toml, port):
+def main2(toml, options, port):
     
     logger.info("start@thread(%s)" % threading.get_ident())
     signal.signal(signal.SIGINT, exit_handler)
@@ -141,14 +142,21 @@ def main2(toml, port):
     config = Config(toml)
     config.load()
 
-    # 靠谱
-    # v = config.get_value("action.c.value")
-    # print(v)
-    logger.info(config.get_pipelines())
+    # TODO:
+    from executor import Executor
+    executors = dict()
+    for (pipeline_name, pipeline) in config.get_pipelines().items():
+        logger.info("pipelines: %s" % pipeline_name)
+        executors[pipeline_name] = Executor(config, pipeline_name, pipeline)
 
-    from server import AdminServer
-    server = AdminServer()
-    server.start()
+    if "without-admin" not in options:
+        from server import AdminServer
+        server = AdminServer(config)
+        server.set_logger(logger)
+        server.start()
+    else:
+        for n, executor in executors.items():
+            executor.execute()
 
 
 if __name__ == '__main__':
@@ -162,7 +170,10 @@ if __name__ == '__main__':
     parser = OptionParser()
 
     parser.add_option("-t", "--toml", action="store", dest="toml", help="Provide the main toml file")
-    parser.add_option("-p", "--port", action="store", dest="port", help="Provide admin server port")
+    parser.add_option("-o", "--options", action="store", dest="options", help="Provide admin server", default="")
+    parser.add_option("-p", "--port", action="store", dest="port", help="Provide admin server port", default=3344)
+    # parser.add_option("-p", "--port", action="store", dest="port", help="Provide admin server port")
+
     options, args = parser.parse_args()
 
     if not options.toml:
@@ -174,5 +185,5 @@ if __name__ == '__main__':
     #if len(configs) > 0:
     #    main(configs)
 
-    main2(options.toml, options.port)
+    main2(options.toml, options.options, options.port)
 

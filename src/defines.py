@@ -23,4 +23,4 @@ Kw_Start_At             = "start_at"
 #全部关键字列表
 Keywords = [Kw_Action, Kw_Main, Kw_Requires, Kw_Resource]
 
-Logger_Format = '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
+Logger_Format = '[%(asctime)s %(levelname)s] <%(pathname)s(%(lineno)d)> %(message)s'

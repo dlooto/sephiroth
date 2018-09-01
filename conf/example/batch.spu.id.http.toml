@@ -2,6 +2,7 @@
 
 [action.requestBatchProductInfo]
 type = "http.get"
+log = "a.log"
 url = "d"
 next = "b"
 start_at = ""
@@ -16,4 +17,5 @@ type = "http.get"
 url = "d"
 next = "c"
 start_at = ""
+log = "b.log"
 

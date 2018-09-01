@@ -33,11 +33,11 @@ class Config:
         path = os.path.dirname(os.path.abspath(self.filename))
         
         self.__parse_toml_files([self.filename])
-        print(self.tomls)
+        # print(self.tomls)
         self.status = ConfigState_Parsed
 
         self.toml_config = self.__load_toml_files()
-        print(self.toml_config)
+        # print(self.toml_config)
         self.status = ConfigState_Loaded
 
     #
@@ -114,7 +114,7 @@ class Config:
                     break
                 pipeline.append(actions_map[action_name])
                 # if found action loop? TODO:
-                print("##", action_name)
+
                 actions_set.add(action_name)
                 action_name = self.get_value('action.%s.next' % action_name)
             pipelines[start_action_name] = pipeline
