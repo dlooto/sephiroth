@@ -11,6 +11,10 @@ class Executor:
         self.pipeline_name = pipeline_name
         self.pipeline = pipeline
 
+        from logger import Logger
+        # Each Executor has its own log file
+        self.logger = Logger("%s.log" % pipeline_name).get_logger()
+
     def start(self):
         pass
 
@@ -23,5 +27,5 @@ class Executor:
     def __on_execute(self, args):
         """
         """
-        print(self.pipeline_name, args)
+        self.logger.info(self.pipeline_name)
         

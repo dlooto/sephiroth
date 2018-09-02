@@ -7,6 +7,11 @@ from executor import Executor
 
 app = Flask(__name__, static_url_path='')
 
+@app.route("/healthCheck")
+def health_check():
+    return "OK"
+
+
 @app.route("/admin")
 def admin():
     return "OK"
@@ -34,9 +39,10 @@ class AdminServer:
             executor = Executor(config, pipeline_name, pipeline)
             self.executors[pipeline_name] = executor
             args = ["Hello"]
+            f_execute = getattr(executor, "execute")
             self.scheduler.add_job(
-                func=getattr(executor, "execute"), 
-                id=pipeline_name, args=args, trigger='cron', second='*/5')
+                func=f_execute, id=pipeline_name, args=args, 
+                trigger='cron', second='*/5')
 
         self.__server_run()
  
