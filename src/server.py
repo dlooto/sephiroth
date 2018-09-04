@@ -22,14 +22,14 @@ class AdminServer:
     def __init__(self, config):
         self.config = config
         self.scheduler = APScheduler()
-        self.logger = None
+        self.__logger = None
         self.executors = dict()
 
     def set_logger(self, logger):
-        self.logger = logger
+        self.__logger = logger
 
     def get_logger(self):
-        return self.logger
+        return self.__logger
 
     def start(self):
         pipelines = self.config.get_pipelines()
@@ -38,13 +38,21 @@ class AdminServer:
             self.get_logger().info("pipelines: %s" % pipeline_name)
             executor = Executor(config, pipeline_name, pipeline)
             self.executors[pipeline_name] = executor
-            args = ["Hello"]
-            f_execute = getattr(executor, "execute")
-            self.scheduler.add_job(
-                func=f_execute, id=pipeline_name, args=args, 
-                trigger='cron', second='*/5')
-
+            self.__add_job(pipeline_name, pipeline, executor)
+                
         self.__server_run()
+    
+    def __add_job(self, pipeline_name, pipeline, executor: Executor):
+        args = [pipeline_name]
+        f_execute = getattr(executor, "execute")
+        params = dict()
+        params['func'] = f_execute
+        params['id'] = pipeline_name
+        params['args'] = args
+        params['trigger'] = pipeline[0]['trigger']
+        params['second'] = pipeline[0]['seconds']
+        self.scheduler.add_job(**params)
+            
  
     def __server_run(self):
         self.scheduler.init_app(app)

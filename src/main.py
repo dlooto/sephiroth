@@ -142,13 +142,6 @@ def main2(toml, options, port):
     config = Config(toml)
     config.load()
 
-    # TODO:
-    from executor import Executor
-    executors = dict()
-    for (pipeline_name, pipeline) in config.get_pipelines().items():
-        logger.info("pipelines: %s" % pipeline_name)
-        executors[pipeline_name] = Executor(config, pipeline_name, pipeline)
-
     if "without-admin" not in options:
         from server import AdminServer
         server = AdminServer(config)

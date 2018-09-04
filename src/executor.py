@@ -21,7 +21,6 @@ class Executor:
     def execute(self, args):
         """
         """
-        # print(self.pipeline_name)
         self.__on_execute(args)
 
     def __on_execute(self, args):

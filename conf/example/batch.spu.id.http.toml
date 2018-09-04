@@ -6,6 +6,8 @@ log = "a.log"
 url = "d"
 next = "b"
 start_at = ""
+trigger = "cron"
+seconds = "*/5"
 
 [action.b]
 value = 1
@@ -18,4 +20,7 @@ url = "d"
 next = "c"
 start_at = ""
 log = "b.log"
+trigger = "cron"
+seconds = "*/10"
+
 
