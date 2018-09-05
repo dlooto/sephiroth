@@ -61,7 +61,7 @@ class Config:
 
                 self.toml_files.append(toml_file_path)
                 self.tomls[toml_file_path] = toml_config
-                print(toml_config)
+                
                 if Kw_Requires in toml_config:
                     toml_files = toml_config[Kw_Requires]
                     self.__parse_toml_files(toml_files)
@@ -77,7 +77,7 @@ class Config:
         return result
 
     @staticmethod
-    def __merge_dict(d1, d2):
+    def __merge_dict(d1: dict, d2: dict):
         """
         Merge d2 into d1
         """

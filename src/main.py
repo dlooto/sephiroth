@@ -11,7 +11,6 @@ except:
 import signal
 import threading
 
-import clock
 import resource
 import engine
 from logger import *
@@ -113,7 +112,6 @@ def main(configs):
     """
     print("Main-ThreadId:", threading.get_ident())
     signal.signal(signal.SIGINT, exit_handler)
-    clock.Clock.tick()
     
     for config in configs:
         if config['__filename__'] == 'global.toml':
