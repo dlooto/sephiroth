@@ -49,8 +49,13 @@ class AdminServer:
         params['func'] = f_execute
         params['id'] = pipeline_name
         params['args'] = args
-        params['trigger'] = pipeline[0]['trigger']
-        params['second'] = pipeline[0]['seconds']
+
+        start_pipeline = pipeline[0]
+        params['trigger'] = start_pipeline['trigger']
+        if 'second' in start_pipeline:
+            params['second'] = start_pipeline['second']
+        elif 'minute' in start_pipeline:
+            params['minute'] = start_pipeline['minute']
         self.scheduler.add_job(**params)
             
  
