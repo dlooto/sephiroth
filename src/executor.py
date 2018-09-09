@@ -41,6 +41,9 @@ class Executor:
             action_config = Config.get_action_config(self.pipeline, action_name)
             if not action_config:
                 break
+            if 'type' not in action_config:
+                print("No action type for ", action_name)
+                exit(0)
             action_type = action_config['type']
             action_type = action_config['type']
             action = BaseAction.create_action(action_type, action_config)

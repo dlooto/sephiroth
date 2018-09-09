@@ -117,7 +117,10 @@ class BaseAction:
 
     def get_next(self):
         # TODO: Dynamic determine the next action
-        return self.action_config['next']
+        if 'next' in self.action_config:
+            return self.action_config['next']
+        else:
+            return None
 
     @staticmethod
     def create_action(action_type, config):

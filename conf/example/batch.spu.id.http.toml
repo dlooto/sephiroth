@@ -11,8 +11,9 @@ second = "*/5"
 
 [action.b]
 type = "json.check"
-value = 1
-next = "c"
+assert_path = "data.list"
+assert_type = "array"
+
 
 
 [action.requestBatchSkuInfo]
