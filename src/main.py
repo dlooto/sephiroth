@@ -107,32 +107,9 @@ def exit_handler(signum, frame):
     sys.exit()
 
 
-def main(configs):
-    """
-    """
-    print("Main-ThreadId:", threading.get_ident())
-    signal.signal(signal.SIGINT, exit_handler)
-    
-    for config in configs:
-        if config['__filename__'] == 'global.toml':
-            resource.Resource.initialize_global_resources(config)
-
-    for config in configs:
-        # Ignore the global resource file
-        if config['__filename__'] == 'global.toml':
-            continue
-        
-        # required .toml would NOT have main section
-        if 'main' not in config:
-            continue
-        
-        # Start an engine with its config including main section only.
-        e = engine.Engine(config)
-        e.start()
-
-
-def main2(toml, options, port):
-    
+def main(toml, options, port):
+    '''
+    '''    
     logger.info("start@thread(%s)" % threading.get_ident())
     signal.signal(signal.SIGINT, exit_handler)
 
@@ -172,9 +149,5 @@ if __name__ == '__main__':
         print(usage.__doc__)
         exit(0)
 
-    #configs = load_configs(options.toml)
-    #if len(configs) > 0:
-    #    main(configs)
-
-    main2(options.toml, options.options, options.port)
+    main(options.toml, options.options, options.port)
 
