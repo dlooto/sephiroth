@@ -35,8 +35,7 @@ class Executor:
         # self.logger.info(self.pipeline_name, self.pipeline)
         action_name = Config.get_start_action_name(self.pipeline)
 
-        # print(self.__context.vars)
-
+    
         while action_name:
             
             action_config = Config.get_action_config(self.pipeline, action_name)
@@ -44,7 +43,7 @@ class Executor:
                 break
             action_type = action_config['type']
             action_type = action_config['type']
-            action = BaseAction.create_action(action_type, action_name)
+            action = BaseAction.create_action(action_type, action_config)
             print(action_name, action)
             action.try_execute(self.get_context())
 
