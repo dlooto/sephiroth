@@ -28,10 +28,15 @@ class JsonCheckAction(BaseAction):
         v = data
         ps = path.split(".")
         for p in ps:
-            v = v[p]
+            if str.isdigit(p):
+                v = v[int(p)]
+            else:
+                v = v[p]
         return v
 
     def match_type(self, value, value_type):
         if value_type in ['array', 'list']:
             return type(value) is list
+        elif value_type in ['str', 'string']:
+            return type(value) is str
         return False

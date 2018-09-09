@@ -13,7 +13,12 @@ second = "*/5"
 type = "json.check"
 assert_path = "data.list"
 assert_type = "array"
+next = "c"
 
+[action.c]
+type = "json.check"
+assert_path = "data.list.0.user_name"
+assert_type = "string"
 
 
 [action.requestBatchSkuInfo]
