@@ -3,6 +3,7 @@
 import pytoml as toml
 
 from defines import *
+from actions import *
 import os
 
 class Config:
@@ -103,23 +104,39 @@ class Config:
 
         pipelines = dict()
         
-        for action_name in start_action_names:
+        for start_action_name in start_action_names:
             # in a pipeline, an action exists once only.
-            start_action_name = action_name
-            actions_set = set()
-            pipeline = []
-            while action_name:
-                if action_name in actions_set:
-                    # loop actions NOT support now.
-                    break
-                pipeline.append(actions_map[action_name])
-                # if found action loop? TODO:
-
-                actions_set.add(action_name)
-                action_name = self.get_value('action.%s.next' % action_name)
+            pipeline = self.get_pipeline(start_action_name)            
             pipelines[start_action_name] = pipeline
         return pipelines
 
+    def get_pipeline(self, start_action_name: str):
+        pipeline = dict()
+        actions_map = self.get_value('action')
+        action_name = start_action_name
+        while action_name:
+            if action_name in pipeline:
+                # loop actions NOT support now.
+                break
+            pipeline[action_name] = actions_map[action_name]
+            action_name = self.get_value('action.%s.next' % action_name)
+        
+        return pipeline
+
+
+    @staticmethod
+    def get_start_action_name(pipeline: dict) -> BaseAction:
+        for action_name, action in pipeline.items():
+            if 'start_at' in action:
+                return action_name
+        return None
+
+    @staticmethod
+    def get_action_config(pipeline: dict, action_name: str) -> dict:
+        if action_name in pipeline:
+            return pipeline[action_name]
+        else:
+            return None
 
     def get_value(self, key, default_val=None):
         if "." not in key:

@@ -3,7 +3,7 @@
 from flask import *
 from flask_apscheduler import APScheduler
 from executor import Executor
-
+from config import Config
 
 app = Flask(__name__, static_url_path='')
 
@@ -50,13 +50,16 @@ class AdminServer:
         params['id'] = pipeline_name
         params['args'] = args
 
-        start_pipeline = pipeline[0]
-        params['trigger'] = start_pipeline['trigger']
-        if 'second' in start_pipeline:
-            params['second'] = start_pipeline['second']
-        elif 'minute' in start_pipeline:
-            params['minute'] = start_pipeline['minute']
+        start_action = Config.get_action_config(pipeline, Config.get_start_action_name(pipeline))
+
+        params['trigger'] = start_action['trigger']
+        if 'second' in start_action:
+            params['second'] = start_action['second']
+        elif 'minute' in start_action:
+            params['minute'] = start_action['minute']
         self.scheduler.add_job(**params)
+
+
             
  
     def __server_run(self):

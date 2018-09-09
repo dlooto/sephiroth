@@ -2,13 +2,14 @@
 from flask_apscheduler import APScheduler
 from actions import *
 from context import *
+from config import Config
 
 class Executor:
     """
     An Executor drives a pipeline which composed by a sequence of actions with a context
     """
     
-    def __init__(self, config, pipeline_name, pipeline):
+    def __init__(self, config: Config, pipeline_name, pipeline):
         self.config = config
         self.pipeline_name = pipeline_name
         self.pipeline = pipeline
@@ -32,6 +33,23 @@ class Executor:
         """
         """
         # self.logger.info(self.pipeline_name, self.pipeline)
-        action = BaseAction.create_action("http.get", self.pipeline[0])
-        action.try_execute(self.get_context())
-        print(self.__context.vars)
+        action_name = Config.get_start_action_name(self.pipeline)
+
+        # print(self.__context.vars)
+
+        while action_name:
+            
+            action_config = Config.get_action_config(self.pipeline, action_name)
+            if not action_config:
+                break
+            action_type = action_config['type']
+            action_type = action_config['type']
+            action = BaseAction.create_action(action_type, action_name)
+            print(action_name, action)
+            action.try_execute(self.get_context())
+
+            action_name = action.get_next()
+
+
+            
+        

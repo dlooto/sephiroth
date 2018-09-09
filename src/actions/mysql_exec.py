@@ -3,7 +3,7 @@ from .base_action import *
 from resource import *
 
 
-@Actions.register("mysql_exec")
+@Actions.register("mysql.exec")
 class MySQLExecAction(BaseAction):
     """
     :param sql || string

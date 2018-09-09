@@ -10,6 +10,7 @@ trigger = "cron"
 second = "*/5"
 
 [action.b]
+type = "json.check"
 value = 1
 next = "c"
 

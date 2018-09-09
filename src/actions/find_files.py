@@ -3,7 +3,7 @@ from .base_action import *
 import os
 
 
-@Actions.register("find_files")
+@Actions.register("find.files")
 class FindFilesAction(BaseAction):
     """
     :param 

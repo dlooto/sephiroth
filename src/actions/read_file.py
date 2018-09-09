@@ -3,7 +3,7 @@
 from .base_action import *
 
 
-@Actions.register("read_file")
+@Actions.register("read.file")
 class ReadFileAction(BaseAction):
     """
     """
