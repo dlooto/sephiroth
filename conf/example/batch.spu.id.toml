@@ -1,0 +1,11 @@
+
+df = 1
+g = 1   #写在这个位置的是全局变量
+# as requires need no section-name
+requires = ["batch.spu.id.http.toml"]
+
+
+
+
+[action.c]
+value = [1, 2]

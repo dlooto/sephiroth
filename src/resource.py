@@ -1,10 +1,16 @@
 
-import MySQLdb
-import MySQLdb.cursors
-import MySQLdb.converters
+try:
+    import MySQLdb
+    import MySQLdb.cursors
+    import MySQLdb.converters
+except:
+    print("Please `pip install mysqlclient`")
+    exit(0)
 
 
 class Resource:
+    """ Resource is for MysQL connections, Logger, Redis client, vars define """
+    
     #
     resource_map = dict()
 

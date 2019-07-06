@@ -52,11 +52,13 @@ class BuildinFunc:
 
     @staticmethod
     def from_bit(bit):
-        if bit == b'\\x0'
+        if bit == b'\x00':
             return 0
         return 1
 
 class Context:
+    """
+    """
 
     def __init__(self):
         self.vars = dict()
@@ -98,6 +100,8 @@ class Context:
                 funcs.append(BuildinFunc.filename)
             elif func_name == 'unixtime':
                 funcs.append(BuildinFunc.unixtime)                
+            elif func_name == 'from_bit':
+                funcs.append(BuildinFunc.from_bit)                
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs

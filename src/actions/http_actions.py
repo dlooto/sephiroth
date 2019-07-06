@@ -4,7 +4,7 @@ import requests
 import json
 
 
-@Actions.register("http_get")
+@Actions.register("http.get")
 class HttpGetAction(BaseAction):
     """
     :param url || string || @required
@@ -18,7 +18,7 @@ class HttpGetAction(BaseAction):
         
         resp = requests.get(url)
         value = resp.text
-        self.log(value)
+        
         return_var = self.get_return_var_name()
 
         if 'content_type' in action_config and action_config['content_type'] == 'json':
@@ -27,8 +27,8 @@ class HttpGetAction(BaseAction):
         context.set_context_var(return_var, value)
 
 
-@Actions.register("http_post")
-class HttpPostAction(BaseAction):
+@Actions.register("http.postForm")
+class HttpPostFormAction(BaseAction):
     """
     """
 
@@ -52,8 +52,11 @@ class HttpPostAction(BaseAction):
         
         self.log(resp.text)
 
+@Actions.register("http.postJson")
+class HttpPostJsonAction(BaseAction):
+    pass
 
-@Actions.register("http_post_file")
+@Actions.register("http.postFile")
 class HttpPostFileAction(BaseAction):
     """
     """
