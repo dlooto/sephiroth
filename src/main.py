@@ -38,6 +38,7 @@ def load_config(filename) -> dict:
     Read toml into config dict.
     """
     with open(filename, "rb") as file:
+        print(filename)
         config = toml.load(file)
     return config
 
