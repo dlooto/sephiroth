@@ -127,7 +127,9 @@ def main(configs):
         e.start()
 
 
+print(334)
 if __name__ == '__main__':
+    print(11)
     work_path = ""
     if len(sys.argv) > 1:
         config_path = sys.argv[1]

@@ -18,13 +18,15 @@ class HttpGetAction(BaseAction):
         
         resp = requests.get(url)
         value = resp.text
-        self.log(value)
+        #self.log(value)
+        print(value)
         return_var = self.get_return_var_name()
-
+        print(return_var)
         if 'content_type' in action_config and action_config['content_type'] == 'json':
             value = json.loads(value)
         
         context.set_context_var(return_var, value)
+        print("End")
 
 
 @Actions.register("http_post")

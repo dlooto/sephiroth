@@ -45,7 +45,7 @@ class Engine:
             self.__state = EngineState_Running
             print("ThreadId:", threading.get_ident())
             context = self.__run(context)
-            
+            print(context)
             # trigger the followers
             Clock.trigger_followers(Engine.run, self, context)
         except Exception as e:

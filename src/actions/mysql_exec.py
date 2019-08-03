@@ -19,6 +19,7 @@ class MySQLExecAction(BaseAction):
             # Logger
             
             self.log(sql)
+            print(sql)
             cursor.execute(sql)
             result = cursor.fetchall()
             print(result)
