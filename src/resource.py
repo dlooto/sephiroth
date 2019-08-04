@@ -17,8 +17,8 @@ class Resource:
     def initialize_global_resources(config):
         for sec in config:
             if sec == 'mysqlconnection':
-                mysql_config = config[sec]
-                Resource.initialize_mysql_connection('global', mysql_config)
+                Resource.__mysql_config = config[sec]
+                Resource.initialize_mysql_connection('global', Resource.__mysql_config)
             if sec == 'redisclient':
                 Resource.initialize_redis_client('global', config[sec])                
             if sec == 'logger':
@@ -96,7 +96,7 @@ class Resource:
             return Resource.resource_map[resource_full_name]
         else:
             print("Reconnect", mysql_config)
-            Resource.initialize_mysql_connection('global', mysql_config)
+            Resource.initialize_mysql_connection('global', Resource.__mysql_config)
             return Resource.resource_map[resource_full_name]
 
 
