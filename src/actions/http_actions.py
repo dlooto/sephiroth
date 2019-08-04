@@ -26,7 +26,7 @@ class HttpGetAction(BaseAction):
             value = json.loads(value)
         
         context.set_context_var(return_var, value)
-        print("End")
+        return True
 
 
 @Actions.register("http_post")
@@ -53,6 +53,7 @@ class HttpPostAction(BaseAction):
         resp.connection.close()
         
         self.log(resp.text)
+        return True
 
 
 @Actions.register("http_post_file")
@@ -77,3 +78,4 @@ class HttpPostFileAction(BaseAction):
             print(resp.text)
             return_var = self.get_return_var_name()
             context.set_context_var(return_var, value)
+        return True

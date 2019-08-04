@@ -104,7 +104,9 @@ class BaseAction:
 
     def try_execute(self, context):
         self.context = context
-        self.execute(context)
+        ret = self.execute(context)
+        if not ret:
+            raise Exception("exit at execute")
 
         action_config = self.get_action_config()
         if 'exit_at' in action_config:

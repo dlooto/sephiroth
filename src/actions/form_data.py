@@ -72,3 +72,4 @@ class ResultSetToFormAction(BaseAction):
         return_var = self.get_return_var_name()
 
         context.set_context_var(return_var, value)
+        return True
