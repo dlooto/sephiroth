@@ -12,20 +12,22 @@ class MySQLExecAction(BaseAction):
 
     def execute(self, context):
         result = None
-        db = Resource.find_resource('global', 'mysqlconnection')
-        
+        action_config = self.get_action_config()
+        sql = context.evaluate(action_config['sql'])
+        self.log("sql:" + sql)
+        if "()" in sql:
+            return False
         try:
+            db = Resource.find_resource('global', 'mysqlconnection')
             with db.cursor() as cursor:
-                action_config = self.get_action_config()
-                sql = context.evaluate(action_config['sql'])
-                # Logger
-                
-                self.log(sql)
+ 
                 cursor.execute(sql)
                 result = cursor.fetchall()
-                print(result)
+                print("Fetch:", result)
                 
                 return_var = self.get_return_var_name()
                 context.set_context_var(return_var, result)
+                return True
         except Exception as e:
             print(e.with_traceback())
+            return False

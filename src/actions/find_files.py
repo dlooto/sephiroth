@@ -20,4 +20,4 @@ class FindFilesAction(BaseAction):
             for file in fs[2]:
                 if not file.startswith('!'):
                     self.set_filename(context, os.path.join(fs[0], file))
-
+        return True
