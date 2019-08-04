@@ -11,11 +11,14 @@ class Resource:
     #
     global_variables = dict()
 
+    mysql_config = None
+
     @staticmethod
     def initialize_global_resources(config):
         for sec in config:
             if sec == 'mysqlconnection':
-                Resource.initialize_mysql_connection('global', config[sec])
+                mysql_config = config[sec]
+                Resource.initialize_mysql_connection('global', mysql_config)
             if sec == 'redisclient':
                 Resource.initialize_redis_client('global', config[sec])                
             if sec == 'logger':
@@ -89,9 +92,22 @@ class Resource:
     @staticmethod
     def find_global_resource(resource_name):
         resource_full_name = "global.%s" % resource_name
-        return Resource.resource_map[resource_full_name]
+        if resource_full_name in Resource.resource_map: 
+            return Resource.resource_map[resource_full_name]
+        else:
+            print("Reconnect", mysql_config)
+            Resource.initialize_mysql_connection('global', mysql_config)
+            return Resource.resource_map[resource_full_name]
+
 
     @staticmethod
     def find_local_resource(scope, resource_name):
         resource_full_name = "%s.%s" % (scope, resource_name)
-        return Resource.resource_map[resource_full_name]        
+        return Resource.resource_map[resource_full_name]
+
+
+    @staticmethod
+    def clear_global_resource(resource_name):
+        resource_full_name = "global.%s" % resource_name        
+        Resource.resource_map[resource_full_name] = None
+      

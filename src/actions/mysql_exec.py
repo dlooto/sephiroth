@@ -29,5 +29,6 @@ class MySQLExecAction(BaseAction):
                 context.set_context_var(return_var, result)
                 return True
         except Exception as e:
-            print(e.with_traceback())
+            print(e)
+            Resource.clear_global_resource('mysqlconnection')
             return False
