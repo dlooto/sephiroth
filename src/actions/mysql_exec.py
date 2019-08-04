@@ -12,6 +12,7 @@ class MySQLExecAction(BaseAction):
 
     def execute(self, context):
         result = None
+
         action_config = self.get_action_config()
         sql = context.evaluate(action_config['sql'])
         self.log("sql:" + sql)
@@ -32,3 +33,4 @@ class MySQLExecAction(BaseAction):
             print(e)
             Resource.clear_global_resource('mysqlconnection')
             return False
+

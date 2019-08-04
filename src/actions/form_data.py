@@ -58,6 +58,7 @@ class ResultSetToFormAction(BaseAction):
         return result
 
     def execute(self, context):
+        print("DDD", context)
         action_config = self.get_action_config()
         # Mapping of src table fields => dest table fields
         key_value_attributes = action_config['key_value_attributes']
