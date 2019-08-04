@@ -92,7 +92,7 @@ class Resource:
     @staticmethod
     def find_global_resource(resource_name):
         resource_full_name = "global.%s" % resource_name
-        if resource_full_name in Resource.resource_map: 
+        if resource_full_name in Resource.resource_map and Resource.resource_map[resource_full_name]: 
             return Resource.resource_map[resource_full_name]
         else:
             print("Reconnect", mysql_config)
