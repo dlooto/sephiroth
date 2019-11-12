@@ -31,7 +31,6 @@ class BaseAction:
     """
     def __init__(self):
         self.context = None
-        self.config = None
         self.engine_name = ""
         self.action_name = ""
         self.action_config = None
@@ -75,14 +74,13 @@ class BaseAction:
         return self.action_name
 
     #
-    def set_info(self, engine_name, action_name, config):
+    def set_info(self, engine_name: str, action_name: str, config: dict):
         """
         This function should be invoked in advanced.
         """
-        self.config = config
         self.engine_name = engine_name
         self.action_name = action_name
-        self.action_config = self.config['action'][self.action_name]
+        self.action_config = config
 
     def get_action_config(self):
         """
@@ -116,3 +114,19 @@ class BaseAction:
                 raise Exception("exit at %s" % exit_at)
 
         self.context = None
+
+    def get_next(self):
+        # TODO: Dynamic determine the next action
+        if 'next' in self.action_config:
+            return self.action_config['next']
+        else:
+            return None
+
+    @staticmethod
+    def create_action(action_type, config):
+        
+        clz = Actions.get_action_class(action_type)
+        action = clz()
+
+        action.set_info("self.name", "action_name", config)
+        return action

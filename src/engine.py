@@ -3,18 +3,9 @@ import threading
 import traceback
 
 from resource import Resource
-from clock import Clock
 from context import *
 from actions import *
-
-
-# EngineState_Init -> EngineState_Start -> EngineState_Running -> EngineState_Waiting
-# -> EngineState_Running
-EngineState_Unknown = 0
-EngineState_Init = 1
-EngineState_Start = 2
-EngineState_Running = 3
-EngineState_Waiting = 4
+from defines import *
 
 
 class Engine:
@@ -23,6 +14,9 @@ class Engine:
     """
     
     def __init__(self, config):
+        """
+        param: 
+        """
         self.config = config
         self.exec_times = 0
         self.trigger_time = 0
@@ -47,7 +41,8 @@ class Engine:
             context = self.__run(context)
             
             # trigger the followers
-            Clock.trigger_followers(Engine.run, self, context)
+            # Clock.trigger_followers(Engine.run, self, context)
+            print("Clock Removed")
         except Exception as e:
             print_exception = Resource.get_global_var('$print_exception')
             if print_exception == 1:
@@ -71,17 +66,18 @@ class Engine:
     def start(self):
         """
         """
+        ...
         if 'vars' in self.config:
             self.initialize_vars(self.config['vars'])
 
-        # TODO: Register Engine in clock.tick for very 30 s
         triggers = self.config['main']['triggers']
         if isinstance(triggers, str):
             triggers = [triggers]
 
         self.__state = EngineState_Start
         for trigger in triggers:
-            Clock.register(self, trigger)
+            pass
+            # Clock.register(self, trigger)
 
     def __run(self, context):
         """

@@ -1,10 +1,16 @@
 
-import MySQLdb
-import MySQLdb.cursors
-import MySQLdb.converters
+try:
+    import MySQLdb
+    import MySQLdb.cursors
+    import MySQLdb.converters
+except:
+    print("Please `pip install mysqlclient`")
+    exit(0)
 
 
 class Resource:
+    """ Resource is for MysQL connections, Logger, Redis client, vars define """
+    
     #
     resource_map = dict()
 
@@ -16,6 +22,7 @@ class Resource:
         for sec in config:
             if sec == 'mysqlconnection':
                 Resource.initialize_mysql_connection('global', config[sec])
+                Resource.__mysql_config = config
             if sec == 'redisclient':
                 Resource.initialize_redis_client('global', config[sec])                
             if sec == 'logger':
@@ -85,6 +92,10 @@ class Resource:
             return Resource.find_global_resource(resource_name)
         else:
             return Resource.find_local_resource(scope, resource_name)
+
+    @staticmethod
+    def reset_mysql_connection(scope):
+        initialize_mysql_connection(scope, Resource.__mysql_config)
 
     @staticmethod
     def find_global_resource(resource_name):

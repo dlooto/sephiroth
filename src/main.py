@@ -2,14 +2,23 @@
 import os
 import sys
 import re
-import pytoml as toml
+
+try:
+    import pytoml as toml
+except:
+    print("Please `pip install pytoml`")
+    exit()
 import signal
 import threading
 
-import clock
 import resource
 import engine
+from logger import *
 
+
+logger = Logger("a.log").get_logger()
+
+logger.info("start sephiroth")
 
 #
 def get_requires(config):
@@ -38,6 +47,7 @@ def load_config(filename) -> dict:
     Read toml into config dict.
     """
     with open(filename, "rb") as file:
+        print(filename)
         config = toml.load(file)
     return config
 
@@ -90,47 +100,55 @@ def load_configs(config_path):
     return config_map.values()
 
 
-def flush_all_logs():
-    pass
-
-
 def exit_handler(signum, frame):
     """
     Quit all the threads when Ctrl+C
     """
-    flush_all_logs()
+    logger.info("exit.<Ctrl+C>")
     sys.exit()
 
 
-def main(configs):
-    """
-    """
-    print("Main-ThreadId:", threading.get_ident())
+def main(toml, options, port):
+    '''
+    '''    
+    logger.info("start@thread(%s)" % threading.get_ident())
     signal.signal(signal.SIGINT, exit_handler)
-    clock.Clock.tick()
-    
-    for config in configs:
-        if config['__filename__'] == 'global.toml':
-            resource.Resource.initialize_global_resources(config)
 
-    for config in configs:
-        # Ignore the global resource file
-        if config['__filename__'] == 'global.toml':
-            continue
-        
-        # required .toml would NOT have main section
-        if 'main' not in config:
-            continue
-        
-        # Start an engine with its config including main section only.
-        e = engine.Engine(config)
-        e.start()
+    from config import Config
+    config = Config(toml)
+    config.load()
+
+    if "without-admin" not in options:
+        from server import AdminServer
+        server = AdminServer(config)
+        server.set_logger(logger)
+        server.start()
+    else:
+        for n, executor in executors.items():
+            executor.execute()
 
 
 if __name__ == '__main__':
+    from help import usage
     work_path = ""
-    if len(sys.argv) > 1:
-        config_path = sys.argv[1]
-    configs = load_configs(config_path)
-    if len(configs) > 0:
-        main(configs)
+    if len(sys.argv) == 1:
+        print(usage.__doc__)
+        exit(0)
+
+    from optparse import OptionParser    
+    parser = OptionParser()
+
+    parser.add_option("-t", "--toml", action="store", dest="toml", help="Provide the main toml file")
+    parser.add_option("-o", "--options", action="store", dest="options", help="Provide admin server", default="")
+    parser.add_option("-p", "--port", action="store", dest="port", help="Provide admin server port", default=3344)
+    # parser.add_option("-p", "--port", action="store", dest="port", help="Provide admin server port")
+
+    options, args = parser.parse_args()
+
+    if not options.toml:
+        print("Please provide the main toml file.")
+        print(usage.__doc__)
+        exit(0)
+
+    main(options.toml, options.options, options.port)
+

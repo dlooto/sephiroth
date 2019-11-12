@@ -51,11 +51,20 @@ class BuildinFunc:
         return int(time.mktime(st))
 
     @staticmethod
+<<<<<<< HEAD
     def format_time(timestamp):
         import time
         return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
+=======
+    def from_bit(bit):
+        if bit == b'\x00':
+            return 0
+        return 1
+>>>>>>> 2971785861d7e9b8504b7864ff8a28eb81e6b249
 
 class Context:
+    """
+    """
 
     def __init__(self):
         self.vars = dict()
@@ -101,6 +110,8 @@ class Context:
                 funcs.append(BuildinFunc.unixtime)                
             elif func_name == 'formatTimeArray':
                 funcs.append(lambda x : ["'%s'" % BuildinFunc.format_time(i) for i in x])
+            elif func_name == 'from_bit':
+                funcs.append(BuildinFunc.from_bit)                
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs
