@@ -50,6 +50,11 @@ class BuildinFunc:
         st = time.strptime(formatted_time, '%Y-%m-%d %H:%M:%S')
         return int(time.mktime(st))
 
+    @staticmethod
+    def format_time(timestamp):
+        import time
+        return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
+
 class Context:
 
     def __init__(self):
@@ -76,6 +81,8 @@ class Context:
                 funcs.append(lambda x: ",".join(x))
             elif func_name == 'stringify':
                 funcs.append(lambda x: [str(i) for i in x])
+            elif func_name == 'quote':
+                funcs.append(lambda x: "'%s'" % x)                
             elif func_name == 'split':
                 funcs.append(lambda x: x.split(','))
             elif func_name == 'first':
@@ -92,6 +99,8 @@ class Context:
                 funcs.append(BuildinFunc.filename)
             elif func_name == 'unixtime':
                 funcs.append(BuildinFunc.unixtime)                
+            elif func_name == 'formatTimeArray':
+                funcs.append(lambda x : ["'%s'" % BuildinFunc.format_time(i) for i in x])
             else:
                 raise Exception('No this function %s!' % func_name)         
         return funcs

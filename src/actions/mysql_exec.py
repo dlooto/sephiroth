@@ -17,7 +17,7 @@ class MySQLExecAction(BaseAction):
             action_config = self.get_action_config()
             sql = context.evaluate(action_config['sql'])
             # Logger
-            
+            print(sql)
             self.log(sql)
             cursor.execute(sql)
             result = cursor.fetchall()
