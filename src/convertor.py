@@ -25,7 +25,7 @@ def formatted_time_to_unixtime(formatted_time):
 @Converters.register('format_unixtime')
 def unixtime_to_formatted_time(unixtime):
     import time
-    return time.strftime('%Y-%m-%d %H:%M:%S', unixtime)
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(unixtime))
 
 # Test code
 # print(Converters.get('unixtime')('2017-07-29 00:11:22'))
