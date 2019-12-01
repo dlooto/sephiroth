@@ -151,6 +151,7 @@ class Engine:
             retry_times += 1
             if retry_times > 5:
                 break
+        action.context = None
         self.exec_times += 1
 
     def get_value(self, key, default_value=None):
