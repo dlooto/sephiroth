@@ -118,7 +118,7 @@ class BaseAction:
                 raise Exception("exit at %s" % exit_at)
         elif 'retry_at' in action_config:
             retry_at = action_config['retry_at']
-            expr = context.evaluate(exit_at)
+            expr = context.evaluate(retry_at)
             # If the express returns True, 
             # throw Exception to finish the whole execution of the pipeline.
             if eval(expr):
