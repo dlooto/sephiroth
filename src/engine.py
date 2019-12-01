@@ -144,7 +144,13 @@ class Engine:
         """
         if action.precheck():
             pass
-        action.try_execute(context)
+        ret = action.try_execute(context)
+        retry_times = 0
+        while ret == "Retry":
+            ret = action.try_execute(context)
+            retry_times += 1
+            if retry_times > 5:
+                break
         self.exec_times += 1
 
     def get_value(self, key, default_value=None):
