@@ -51,16 +51,15 @@ class BuildinFunc:
         return int(time.mktime(st))
 
     @staticmethod
-<<<<<<< HEAD
     def format_time(timestamp):
         import time
         return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
-=======
+
+    @staticmethod    
     def from_bit(bit):
         if bit == b'\x00':
             return 0
         return 1
->>>>>>> 2971785861d7e9b8504b7864ff8a28eb81e6b249
 
 class Context:
     """
