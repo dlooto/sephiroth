@@ -73,15 +73,16 @@ class HttpPostFileAction(BaseAction):
     """
     """
 
-    def upload2newplatform(self, post_url, file):
+    def upload2newplatform(self, filename, post_url):
         parse_url = urlparse(post_url)
         query_params = parse_url.query
         api = 'http://platform.scarletsun.wang/api/v1/device/hpge/upload/?%s' % query_params
-        try:
-            resp = requests.post(api, files={'file': file})
-            self.log(resp.status_code)
-        except:
-            pass
+        with open(filename, 'rb') as file:
+            try:
+                resp = requests.post(api, files={'file': file})
+                self.log(resp.status_code)
+            except:
+                pass
 
     def execute(self, context):
         action_config = self.get_action_config()
@@ -100,5 +101,6 @@ class HttpPostFileAction(BaseAction):
             print(resp.text)
             return_var = self.get_return_var_name()
             context.set_context_var(return_var, value)
-            self.upload2newplatform(post_url, file)
+
+        self.upload2newplatform(filename, post_url)
         return True
