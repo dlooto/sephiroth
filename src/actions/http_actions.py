@@ -17,6 +17,10 @@ class HttpGetAction(BaseAction):
         action_config = self.get_action_config()
         url = context.evaluate(action_config['url'])
 
+        if 'd/cmd/fetch/history' in url:
+            device_id = url.split('/')[-1]
+            url = 'http://platform.scarletsun.wang/api/v1/device/data/retransmission/%s/fetch_history/' % device_id
+
         resp = requests.get(url)
         value = resp.text
         self.log(value)
@@ -53,18 +57,21 @@ class HttpPostAction(BaseAction):
         data = context.get_context_var(param0)
 
         post_url = context.evaluate(action_config['url'])
-        resp = requests.post(post_url, data=data)
-        value = resp.text
-        print(value)
-        if 'content_type' in action_config and action_config['content_type'] == 'json':
-            value = json.loads(value)
-
-        return_var = self.get_return_var_name()
-        context.set_context_var(return_var, value)
-        resp.connection.close()
-
-        self.log(resp.text)
         self.send_data2newplatform(post_url, data)
+        try:
+            resp = requests.post(post_url, data=data)
+            value = resp.text
+            print(value)
+            if 'content_type' in action_config and action_config['content_type'] == 'json':
+                value = json.loads(value)
+
+            return_var = self.get_return_var_name()
+            context.set_context_var(return_var, value)
+            resp.connection.close()
+
+            self.log(resp.text)
+        except Exception as e:
+            self.log(e)
         return True
 
 
@@ -91,16 +98,21 @@ class HttpPostFileAction(BaseAction):
 
         filename = context.evaluate(param0)
         print(filename)
-        with open(filename, 'rb') as file:
-            post_url = context.evaluate(action_config['url'])
-            resp = requests.post(post_url, files={'file': file})
-            value = resp.text
-            print(value)
-            if 'content_type' in action_config and action_config['content_type'] == 'json':
-                value = json.loads(value)
-            print(resp.text)
-            return_var = self.get_return_var_name()
-            context.set_context_var(return_var, value)
+        post_url = context.evaluate(action_config['url'])
 
         self.upload2newplatform(filename, post_url)
+
+        with open(filename, 'rb') as file:
+            try:
+                resp = requests.post(post_url, files={'file': file})
+                value = resp.text
+                print(value)
+                if 'content_type' in action_config and action_config['content_type'] == 'json':
+                    value = json.loads(value)
+                print(resp.text)
+                return_var = self.get_return_var_name()
+                context.set_context_var(return_var, value)
+            except Exception as e:
+                print(e)
+
         return True
