@@ -151,7 +151,7 @@ class Retransmission:
 
     def upload_hpge_file(self):
         end_time = datetime.datetime.now()
-        start_time = end_time + datetime.timedelta(seconds=60*60*4)
+        start_time = end_time - datetime.timedelta(seconds=60*60*4)
         timepoints = [
             start_time.timestamp(),
             end_time.timestamp(),
