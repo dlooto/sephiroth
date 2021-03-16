@@ -61,17 +61,10 @@ class HttpPostAction(BaseAction):
         post_url = context.evaluate(action_config['url'])
         self.send_data2newplatform(post_url, data)
         try:
-            resp = requests.post(post_url, data=data)
-            value = resp.text
-            print(value)
-            if 'content_type' in action_config and action_config['content_type'] == 'json':
-                value = json.loads(value)
-
+            # shanghai-3 is new station, not connect to http://www.nucurie.com:1024
+            value = 'No need send data to http://www.nucurie.com:1024/newbackdemo/index.html'
             return_var = self.get_return_var_name()
             context.set_context_var(return_var, value)
-            resp.connection.close()
-
-            self.log(resp.text)
         except Exception as e:
             self.log(e)
         return True
@@ -103,18 +96,12 @@ class HttpPostFileAction(BaseAction):
         post_url = context.evaluate(action_config['url'])
 
         self.upload2newplatform(filename, post_url)
-
-        with open(filename, 'rb') as file:
-            try:
-                resp = requests.post(post_url, files={'file': file})
-                value = resp.text
-                print(value)
-                if 'content_type' in action_config and action_config['content_type'] == 'json':
-                    value = json.loads(value)
-                print(resp.text)
-                return_var = self.get_return_var_name()
-                context.set_context_var(return_var, value)
-            except Exception as e:
-                print(e)
+        try:
+            # shanghai-3 is new station, not connect to http://www.nucurie.com:1024
+            value = 'No need send file to http://www.nucurie.com:1024/newbackdemo/index.html'
+            return_var = self.get_return_var_name()
+            context.set_context_var(return_var, value)
+        except Exception as e:
+            print(e)
 
         return True
